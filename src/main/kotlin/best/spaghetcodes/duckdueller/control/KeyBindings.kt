@@ -11,7 +11,7 @@ object KeyBindings {
     private val toggleBotKeyBinding: KeyBinding = KeyBinding("duck.toggleBot", Keyboard.KEY_SEMICOLON, "category.duck")
 
     fun registerKeyBindings() {
-        println("Registering key bindings")
+        println("Registering KeyBindings")
 
         keyBindings.add(toggleBotKeyBinding)
 
