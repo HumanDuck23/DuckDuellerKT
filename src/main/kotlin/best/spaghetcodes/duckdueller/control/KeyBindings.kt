@@ -8,7 +8,7 @@ object KeyBindings {
 
     val keyBindings: ArrayList<KeyBinding> = ArrayList()
 
-    private val toggleBotKeyBinding: KeyBinding = KeyBinding("duck.toggleBot", Keyboard.KEY_SEMICOLON, "category.duck")
+    val toggleBotKeyBinding: KeyBinding = KeyBinding("duck.toggleBot", Keyboard.KEY_SEMICOLON, "category.duck")
 
     fun registerKeyBindings() {
         println("Registering KeyBindings")
