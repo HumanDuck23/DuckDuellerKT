@@ -1,5 +1,6 @@
 package best.spaghetcodes.duckdueller
 
+import best.spaghetcodes.duckdueller.control.KeyBindings
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 

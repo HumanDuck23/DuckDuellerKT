@@ -1,4 +1,4 @@
-package best.spaghetcodes.duckdueller
+package best.spaghetcodes.duckdueller.control
 
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.fml.client.registry.ClientRegistry
