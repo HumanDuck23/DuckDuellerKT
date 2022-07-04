@@ -1,14 +1,14 @@
 [
   {
-    "modid": "forgetemplate",
-    "name": "ForgeTemplate",
-    "description": "An example template",
+    "modid": "duckdueller",
+    "name": "Duck Dueller",
+    "description": "FOSS Hypixel Duels Bot",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      ""
+      "_Spqghett1"
     ],
     "credits": "",
     "logoFile": "",
