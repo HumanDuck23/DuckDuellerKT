@@ -1,6 +1,8 @@
 package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.control.KeyBindings
+import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 
@@ -16,6 +18,7 @@ const val MOD_ID = "assets/lang/duckdueller"
 )
 object DuckDueller {
 
+    val mc: Minecraft = Minecraft.getMinecraft()
     private val eventHandler: EventHandler = EventHandler()
 
     @Mod.EventHandler
@@ -23,6 +26,7 @@ object DuckDueller {
         println("Duck Dueller v$VERSION is loading...")
 
         KeyBindings.registerKeyBindings()
+        MinecraftForge.EVENT_BUS.register(eventHandler)
     }
 
 }
