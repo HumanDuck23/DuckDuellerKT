@@ -1,5 +1,6 @@
 package best.spaghetcodes.duckdueller
 
+import best.spaghetcodes.duckdueller.control.Commands
 import best.spaghetcodes.duckdueller.control.KeyBindings
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge
@@ -26,6 +27,8 @@ object DuckDueller {
         println("Duck Dueller v$VERSION is loading...")
 
         KeyBindings.registerKeyBindings()
+        Commands.registerCommands()
+
         MinecraftForge.EVENT_BUS.register(eventHandler)
     }
 
