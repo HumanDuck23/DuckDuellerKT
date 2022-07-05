@@ -2,6 +2,7 @@ package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
+import best.spaghetcodes.duckdueller.bot.player.Mouse
 import best.spaghetcodes.duckdueller.bot.player.Queue
 import best.spaghetcodes.duckdueller.control.Commands
 import best.spaghetcodes.duckdueller.control.KeyBindings
@@ -38,6 +39,7 @@ object DuckDueller {
 
         MinecraftForge.EVENT_BUS.register(eventHandler)
         MinecraftForge.EVENT_BUS.register(Queue)
+        MinecraftForge.EVENT_BUS.register(Mouse)
 
         setBot(Sumo()) // default bot is sumo
     }
