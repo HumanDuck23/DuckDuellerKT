@@ -32,6 +32,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     private var ticksSinceLastHit = 0
 
+    protected var combo = 0
+    protected var opponentCombo = 0
+
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
         return "Base"
@@ -143,6 +146,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         }
 
         if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
+            combo = 0
+            opponentCombo++
             onAttacked()
         }
     }
@@ -150,6 +155,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     @SubscribeEvent
     fun onAttackEntityEvent(ev: AttackEntityEvent) {
         if (isToggled() && ev.entity === mc.thePlayer && ticksSinceLastHit > 15) {
+            opponentCombo = 0
+            combo++
             onAttack()
             ticksSinceLastHit = 0
         }
