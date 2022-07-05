@@ -47,6 +47,17 @@ object WorldUtils {
         return checkAir(lookVecScaled, pos)
     }
 
+    fun leftEdgeCloserThanRight(player: EntityPlayer): Boolean {
+        for (i in 0..10) {
+            if (isAirOnLeft(player, i.toFloat())) {
+                return true
+            } else if (isAirOnRight(player, i.toFloat())) {
+                return false
+            }
+        }
+        return false
+    }
+
     private fun checkAir(lookVec: Vec3, pos: BlockPos): Boolean {
         val checkRadius = 2
         for (i in 0 until checkRadius) {
