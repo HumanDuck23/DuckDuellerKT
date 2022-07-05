@@ -2,6 +2,7 @@ package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.control.Commands
 import best.spaghetcodes.duckdueller.control.KeyBindings
+import best.spaghetcodes.duckdueller.utils.Config
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
@@ -28,6 +29,7 @@ object DuckDueller {
 
         KeyBindings.registerKeyBindings()
         Commands.registerCommands()
+        Config.load()
 
         MinecraftForge.EVENT_BUS.register(eventHandler)
     }
