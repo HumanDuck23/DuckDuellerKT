@@ -110,6 +110,16 @@ object Movement {
         }
     }
 
+    fun clearAll() {
+        stopForward()
+        stopBackward()
+        stopLeft()
+        stopRight()
+        stopJumping()
+        stopSprinting()
+        stopSneaking()
+    }
+
     fun forward(): Boolean {
         return forward
     }
