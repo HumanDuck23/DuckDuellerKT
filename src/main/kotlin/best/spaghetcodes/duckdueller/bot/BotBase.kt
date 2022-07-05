@@ -129,7 +129,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     }
 
     @SubscribeEvent
-    fun onTick(ev: ClientTickEvent) {
+    fun onTickEvent(ev: ClientTickEvent) {
+        onTick()
         if (KeyBindings.toggleBotKeyBinding.isPressed) {
             toggle()
             ChatUtils.info("Duck Dueller has been toggled ${if (isToggled()) "${EnumChatFormatting.GREEN}on" else "${EnumChatFormatting.RED}off"}")
