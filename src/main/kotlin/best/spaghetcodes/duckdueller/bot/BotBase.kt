@@ -67,6 +67,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     fun isToggled() = toggled
 
+    fun getOpponentE() = opponent
+
     // Private backend bot stuff
 
     private fun _gameStart() {
