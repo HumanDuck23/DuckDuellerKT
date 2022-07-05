@@ -125,6 +125,16 @@ object Movement {
         stopRight()
     }
 
+    fun swapLeftRight() {
+        if (left) {
+            stopLeft()
+            startRight()
+        } else if (right) {
+            stopRight()
+            startLeft()
+        }
+    }
+
     fun forward(): Boolean {
         return forward
     }
