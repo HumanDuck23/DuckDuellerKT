@@ -108,7 +108,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         onGameEnd()
 
         TimeUtils.setTimeout(fun () {
-            DuckDueller.mc.thePlayer.sendChatMessage(Config.get("ggMessage") as String? ?: "GG")
+            mc.thePlayer.sendChatMessage(Config.get("ggMessage") as String? ?: "GG")
             TimeUtils.setTimeout(fun () {
                 best.spaghetcodes.duckdueller.bot.player.Queue.joinGame(queueCommand)
             }, Config.get("rqDelay") as Int)
