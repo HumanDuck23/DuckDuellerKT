@@ -59,6 +59,11 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
      */
     protected open fun onFoundOpponent() {}
 
+    /**
+     * Called every tick
+     */
+    protected open fun onTick() {}
+
     // Public base methods for every bot
 
     fun toggle() {
