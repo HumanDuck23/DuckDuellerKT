@@ -120,6 +120,11 @@ object Movement {
         stopSneaking()
     }
 
+    fun clearLeftRight() {
+        stopLeft()
+        stopRight()
+    }
+
     fun forward(): Boolean {
         return forward
     }
