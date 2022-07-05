@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
 import java.util.*
@@ -28,6 +29,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     private var calledFoundOpponent = false
     private var opponentTimer: Timer? = null
+
+    private var ticksSinceLastHit = 0
 
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
@@ -131,10 +134,24 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     @SubscribeEvent
     fun onTickEvent(ev: ClientTickEvent) {
         onTick()
+        ticksSinceLastHit++
+
         if (KeyBindings.toggleBotKeyBinding.isPressed) {
             toggle()
             ChatUtils.info("Duck Dueller has been toggled ${if (isToggled()) "${EnumChatFormatting.GREEN}on" else "${EnumChatFormatting.RED}off"}")
             if (isToggled()) ChatUtils.info("Current selected bot: ${EnumChatFormatting.BOLD}${EnumChatFormatting.GREEN}${getName()}${EnumChatFormatting.RESET}")
+        }
+
+        if (mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
+            onAttacked()
+        }
+    }
+
+    @SubscribeEvent
+    fun onAttackEntityEvent(ev: AttackEntityEvent) {
+        if (ev.entity === mc.thePlayer && ticksSinceLastHit > 15) {
+            onAttack()
+            ticksSinceLastHit = 0
         }
     }
 
