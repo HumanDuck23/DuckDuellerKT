@@ -1,6 +1,8 @@
 package best.spaghetcodes.duckdueller.bot.player
 
 import best.spaghetcodes.duckdueller.DuckDueller
+import best.spaghetcodes.duckdueller.utils.RandomUtils
+import best.spaghetcodes.duckdueller.utils.TimeUtils
 import net.minecraft.client.settings.KeyBinding
 
 object Movement {
@@ -108,6 +110,11 @@ object Movement {
             sneaking = false
             KeyBinding.setKeyBindState(DuckDueller.mc.gameSettings.keyBindSneak.keyCode, false)
         }
+    }
+
+    fun singleJump(holdDuration: Int) {
+        startJumping()
+        TimeUtils.setTimeout(this::stopJumping, holdDuration)
     }
 
     fun clearAll() {
