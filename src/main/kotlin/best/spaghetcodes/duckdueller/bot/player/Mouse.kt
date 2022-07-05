@@ -56,6 +56,14 @@ object Mouse {
         leftAC = false
     }
 
+    fun startTracking() {
+        tracking = true
+    }
+
+    fun stopTracking() {
+        tracking = false
+    }
+
     private fun leftACFunc() {
         if (DuckDueller.getBot()?.isToggled() == true && leftAC) {
             val minCPS = Config.get("minCPS") as Int
