@@ -18,6 +18,8 @@ object Config {
         config["ggDelay"] = 100
         config["ggMessage"] = "gg"
         config["rqDelay"] = 1000
+        config["maxDistanceLook"] = 150
+        config["maxDistanceAttack"] = 15
     }
 
     fun load() {

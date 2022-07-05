@@ -39,6 +39,8 @@ object Commands {
                         ChatUtils.info("/duck ggMessage <message> - ${EnumChatFormatting.ITALIC}AutoGG Message")
                         ChatUtils.info("/duck ggDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before sending ${EnumChatFormatting.BOLD}ggMessage")
                         ChatUtils.info("/duck rqDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before re-queueing")
+                        ChatUtils.info("/duck maxDistanceLook <blocks> - ${EnumChatFormatting.ITALIC}Bot view distance")
+                        ChatUtils.info("/duck maxDistanceAttack <blocks> - ${EnumChatFormatting.ITALIC}Bot attack distance")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }
                     else -> {
