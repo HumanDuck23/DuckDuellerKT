@@ -142,14 +142,14 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             if (isToggled()) ChatUtils.info("Current selected bot: ${EnumChatFormatting.BOLD}${EnumChatFormatting.GREEN}${getName()}${EnumChatFormatting.RESET}")
         }
 
-        if (mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
+        if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
             onAttacked()
         }
     }
 
     @SubscribeEvent
     fun onAttackEntityEvent(ev: AttackEntityEvent) {
-        if (ev.entity === mc.thePlayer && ticksSinceLastHit > 15) {
+        if (isToggled() && ev.entity === mc.thePlayer && ticksSinceLastHit > 15) {
             onAttack()
             ticksSinceLastHit = 0
         }
