@@ -10,6 +10,9 @@ import org.lwjgl.input.Keyboard
 
 object Commands {
 
+    /**
+     * /duck command
+     */
     class DuckCommand : CommandBase() {
         override fun getCommandName(): String {
             return "duck"
@@ -39,7 +42,9 @@ object Commands {
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }
                     else -> {
+                        // make sure the value is in the config
                         if (Config.get(args[0]) != null) {
+                            // either print the current config value or set a new one
                             if (args.size >= 2) {
                                 when(Config.get(args[0])) {
                                     is Int -> {

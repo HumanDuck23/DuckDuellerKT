@@ -9,6 +9,8 @@ object Config {
 
     private val config = HashMap<String, Any>()
 
+    // set the config
+    // needed if there is no config file yet or if new values get added later on
     init {
         config["minCPS"] = 10
         config["maxCPS"] = 14
@@ -25,11 +27,11 @@ object Config {
 
         if (file.exists()) {
             val lines = file.readLines()
-            for (line in lines) {
+            for (line in lines) { // parse the file line by line
                 if (line.contains("=")) {
                     val split = line.split("=")
                     if (split.size == 2) {
-                        when (config[split[0]]) {
+                        when (config[split[0]]) { // make sure to use the correct type
                             is Int -> {
                                 config[split[0]] = split[1].toInt()
                             }
