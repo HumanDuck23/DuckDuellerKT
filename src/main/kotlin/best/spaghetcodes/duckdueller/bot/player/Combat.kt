@@ -38,8 +38,10 @@ object Combat {
     }
 
     fun startRandomStrafe(min: Int, max: Int) {
-        randomStrafe = true
-        randomStrafeFunc(min, max)
+        if (!randomStrafe) {
+            randomStrafe = true
+            randomStrafeFunc(min, max)
+        }
     }
 
     fun stopRandomStrafe() {
