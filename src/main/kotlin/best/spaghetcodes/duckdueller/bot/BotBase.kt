@@ -30,7 +30,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     private var calledFoundOpponent = false
     private var opponentTimer: Timer? = null
 
-    private var gameStarted = false
+    protected var gameStarted = false
 
     private var ticksSinceLastHit = 0
 
