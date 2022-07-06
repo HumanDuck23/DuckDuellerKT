@@ -30,6 +30,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     private var calledFoundOpponent = false
     private var opponentTimer: Timer? = null
 
+    private var gameStarted = false
+
     private var ticksSinceLastHit = 0
 
     protected var combo = 0
@@ -83,6 +85,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     // Private backend bot stuff
 
     private fun _gameStart() {
+        gameStarted = true
         val quickRefreshTimer: Timer? = TimeUtils.setInterval(this::bakery, 200, 50)
         TimeUtils.setTimeout(fun () {
             quickRefreshTimer?.cancel()
@@ -94,10 +97,12 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     private fun bakery() { // yes.
         // yes this is a feature
-        val foundOpponent = getOpponentEntity()
-        if (foundOpponent && !calledFoundOpponent) {
-            calledFoundOpponent = true
-            onFoundOpponent()
+        if (gameStarted) {
+            val foundOpponent = getOpponentEntity()
+            if (foundOpponent && !calledFoundOpponent) {
+                calledFoundOpponent = true
+                onFoundOpponent()
+            }
         }
     }
 
@@ -110,6 +115,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         opponent = null
         calledFoundOpponent = false
         opponentTimer?.cancel()
+        gameStarted = false
 
         onGameEnd()
 
@@ -149,6 +155,11 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             combo = 0
             opponentCombo++
             onAttacked()
+        }
+
+        if (isToggled() && mc.thePlayer != null && opponent != null && mc.thePlayer.getDistanceToEntity(opponent) > 4 && combo > 0) {
+            combo = 0
+            ChatUtils.info("combo reset")
         }
     }
 
