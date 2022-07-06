@@ -107,7 +107,7 @@ object Mouse {
 
             if (rotations != null) { // very stupid mouse jitter code dont bully me
                 if (changedYaw == -1 && !changingYawPositive) {
-                    changedYawMax = RandomUtils.randomIntInRange(-5, 5)
+                    changedYawMax = RandomUtils.randomIntInRange(-2, 2)
                     changeYawBy = if (changedYawMax > 0) 1 else -1
                     changedYaw = 0
                     changingYawPositive = true
