@@ -60,15 +60,45 @@ object EntityUtils {
             val dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ).toDouble()
             val yaw = (Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793).toFloat() - 90.0f
             val pitch = (-(Math.atan2(diffY, dist) * 180.0 / 3.141592653589793)).toFloat()
-            if (raw) {
-                floatArrayOf(
-                    MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw),
-                    MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch)
+
+            if (crossHairDistance(yaw, pitch, player) > 2) {
+                if (raw) {
+                    floatArrayOf(
+                        MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw),
+                        MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch)
+                    )
+                } else floatArrayOf(
+                    player.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw),
+                    player.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch)
                 )
-            } else floatArrayOf(
-                player.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - player.rotationYaw),
-                player.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - player.rotationPitch)
-            )
+            } else {
+                if (raw) {
+                    floatArrayOf(
+                        0F, 0F
+                    )
+                } else {
+                    floatArrayOf(
+                        player.rotationYaw,
+                        player.rotationPitch
+                    )
+                }
+            }
+        }
+    }
+
+    fun crossHairDistance(yaw: Float, pitch: Float, player: EntityPlayer): Float {
+        val nYaw = yaw - player.rotationYaw - yaw
+        val nPitch = pitch - player.rotationPitch - pitch
+        return MathHelper.sqrt_float(nYaw * nYaw + nPitch * nPitch)
+    }
+
+    fun getDistanceNoY(player: EntityPlayer?, target: Entity?): Float {
+        return if (target == null || player == null) {
+            0f
+        } else {
+            val diffX = player.posX - target.posX
+            val diffZ = player.posZ - target.posZ
+            MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ).toFloat()
         }
     }
 
