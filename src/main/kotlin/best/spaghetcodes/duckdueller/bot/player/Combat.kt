@@ -6,6 +6,8 @@ import best.spaghetcodes.duckdueller.utils.TimeUtils
 object Combat {
 
     private var randomStrafe = false
+    private var randomStrafeMin = 0
+    private var randomStrafeMax = 0
 
     fun wTap(duration: Int) {
         Movement.stopForward()
@@ -27,6 +29,11 @@ object Combat {
         TimeUtils.setTimeout(Movement::stopRight, duration)
     }
 
+    fun shiftTap(duration: Int) {
+        Movement.startSneaking()
+        TimeUtils.setTimeout(Movement::stopSneaking, duration)
+    }
+
     fun spamA(hold: Int, duration: Int) {
         val spamTimer = TimeUtils.setInterval(fun () { aTap(hold) }, 0, hold * 2 + RandomUtils.randomIntInRange(0, hold/5))
         TimeUtils.setTimeout(fun () { spamTimer?.cancel() }, duration)
@@ -38,17 +45,20 @@ object Combat {
     }
 
     fun startRandomStrafe(min: Int, max: Int) {
+        randomStrafeMin = min
+        randomStrafeMax = max
         if (!randomStrafe) {
             randomStrafe = true
-            randomStrafeFunc(min, max)
+            randomStrafeFunc()
         }
     }
 
     fun stopRandomStrafe() {
         randomStrafe = false
+        Movement.clearLeftRight()
     }
 
-    private fun randomStrafeFunc(min: Int, max: Int) {
+    private fun randomStrafeFunc() {
         if (randomStrafe) {
             if (!(Movement.left() || Movement.right())) {
                 if (RandomUtils.randomBool()) {
@@ -59,7 +69,7 @@ object Combat {
             } else {
                 Movement.swapLeftRight()
             }
-            TimeUtils.setTimeout(fun () { randomStrafeFunc(min, max) }, RandomUtils.randomIntInRange(min, max))
+            TimeUtils.setTimeout(this::randomStrafeFunc, RandomUtils.randomIntInRange(randomStrafeMin, randomStrafeMax))
         }
     }
 
