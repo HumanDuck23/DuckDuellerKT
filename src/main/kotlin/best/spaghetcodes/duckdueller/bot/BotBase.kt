@@ -1,7 +1,7 @@
 package best.spaghetcodes.duckdueller.bot
 
-import best.spaghetcodes.duckdueller.DuckDueller
 import best.spaghetcodes.duckdueller.control.KeyBindings
+import best.spaghetcodes.duckdueller.bot.player.Queue
 import best.spaghetcodes.duckdueller.utils.ChatUtils
 import best.spaghetcodes.duckdueller.utils.Config
 import best.spaghetcodes.duckdueller.utils.EntityUtils
@@ -122,7 +122,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         TimeUtils.setTimeout(fun () {
             mc.thePlayer.sendChatMessage(Config.get("ggMessage") as String? ?: "GG")
             TimeUtils.setTimeout(fun () {
-                best.spaghetcodes.duckdueller.bot.player.Queue.joinGame(queueCommand)
+                Queue.joinGame(queueCommand)
             }, Config.get("rqDelay") as Int)
         }, Config.get("ggDelay") as Int)
     }
@@ -148,7 +148,11 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         if (KeyBindings.toggleBotKeyBinding.isPressed) {
             toggle()
             ChatUtils.info("Duck Dueller has been toggled ${if (isToggled()) "${EnumChatFormatting.GREEN}on" else "${EnumChatFormatting.RED}off"}")
-            if (isToggled()) ChatUtils.info("Current selected bot: ${EnumChatFormatting.BOLD}${EnumChatFormatting.GREEN}${getName()}${EnumChatFormatting.RESET}")
+            if (isToggled()) {
+                ChatUtils.info("Current selected bot: ${EnumChatFormatting.BOLD}${EnumChatFormatting.GREEN}${getName()}${EnumChatFormatting.RESET}")
+                ChatUtils.info("Joining game...")
+                Queue.joinGame(queueCommand)
+            }
         }
 
         if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
@@ -157,7 +161,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             onAttacked()
         }
 
-        if (isToggled() && mc.thePlayer != null && opponent != null && mc.thePlayer.getDistanceToEntity(opponent) > 4 && combo > 0) {
+        if (isToggled() && mc.thePlayer != null && opponent != null && EntityUtils.getDistanceNoY(mc.thePlayer, opponent) > 5 && combo > 0) {
             combo = 0
             ChatUtils.info("combo reset")
         }
