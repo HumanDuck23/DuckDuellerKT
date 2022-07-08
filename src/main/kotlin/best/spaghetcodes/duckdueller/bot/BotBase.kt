@@ -3,10 +3,7 @@ package best.spaghetcodes.duckdueller.bot
 import best.spaghetcodes.duckdueller.bot.player.JSONDataClasses
 import best.spaghetcodes.duckdueller.control.KeyBindings
 import best.spaghetcodes.duckdueller.bot.player.Queue
-import best.spaghetcodes.duckdueller.utils.ChatUtils
-import best.spaghetcodes.duckdueller.utils.Config
-import best.spaghetcodes.duckdueller.utils.EntityUtils
-import best.spaghetcodes.duckdueller.utils.TimeUtils
+import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
@@ -15,6 +12,8 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 /**
@@ -32,12 +31,16 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     private var calledFoundOpponent = false
     private var opponentTimer: Timer? = null
 
-    protected var gameStarted = false
+    var gameStarted = false
 
     private var ticksSinceLastHit = 0
 
     protected var combo = 0
     protected var opponentCombo = 0
+
+    var playersSent = ArrayList<String>()
+    var playersLost = ArrayList<String>()
+    var gotStats = false
 
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
@@ -89,6 +92,47 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     fun getOpponentE() = opponent
 
+    // other
+
+    protected fun onParsedStats(p: JSONDataClasses.Player, w: Int, wlr: Float, cws: Int) {
+        var dodge = false
+
+        if (playersLost.contains(p.name)) {
+            ChatUtils.info("Lost to ${p.name} before, dodging...")
+            dodge = true
+        }
+
+        gotStats = true
+
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        val wlrString = df.format(wlr)
+
+        ChatUtils.info("${p.name} ${EnumChatFormatting.GOLD}>> ${EnumChatFormatting.GREEN}W: $w ${EnumChatFormatting.RED}W/L: $wlrString ${EnumChatFormatting.LIGHT_PURPLE}CWS: $cws${EnumChatFormatting.RESET}")
+
+        val dodgeWins = Config.get("dodgeWins") as Int
+        val dodgeWS = Config.get("dodgeWS") as Int
+        val dodgeWLR = Config.get("dodgeWLR") as Int
+
+        if (w >= dodgeWins) {
+            ChatUtils.info("${p.name} has more than $dodgeWins wins, dodging...")
+            dodge = true
+        } else if (cws >= dodgeWS) {
+            ChatUtils.info("${p.name} has a ws higher than $dodgeWS, dodging...")
+            dodge = true
+        } else if (wlr >= dodgeWLR) {
+            ChatUtils.info("${p.name} has a W/L higher than $dodgeWLR, dodging...")
+            dodge = true
+        }
+
+        playersSent.add(0, p.name)
+
+        if (dodge) {
+            Queue.leaveGame()
+            TimeUtils.setTimeout(fun () { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
+        }
+    }
+
     // Private backend bot stuff
 
     private fun _gameStart() {
@@ -123,6 +167,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         calledFoundOpponent = false
         opponentTimer?.cancel()
         gameStarted = false
+        gotStats = false
 
         onGameEnd()
 
@@ -130,6 +175,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             mc.thePlayer.sendChatMessage(Config.get("ggMessage") as String? ?: "GG")
             TimeUtils.setTimeout(fun () {
                 Queue.joinGame(queueCommand)
+                playersSent.removeAll { true }
             }, Config.get("rqDelay") as Int)
         }, Config.get("ggDelay") as Int)
     }
@@ -138,6 +184,12 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     fun onChatMessage(ev: ClientChatReceivedEvent) {
         if (isToggled()) {
             val unformatted = ev.message.unformattedText
+
+            if (unformatted.contains("The game starts in 2 seconds!") && !gotStats) {
+                ChatUtils.info("Didn't find any stats, leaving game...")
+                Queue.leaveGame()
+                TimeUtils.setTimeout(fun() { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
+            }
 
             if (unformatted.contains(startMessage)) {
                 _gameStart()
