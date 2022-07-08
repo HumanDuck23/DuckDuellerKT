@@ -1,5 +1,9 @@
 package best.spaghetcodes.duckdueller.control
 
+import best.spaghetcodes.duckdueller.DuckDueller
+import best.spaghetcodes.duckdueller.bot.BotBase
+import best.spaghetcodes.duckdueller.bot.bots.Sumo
+import best.spaghetcodes.duckdueller.bot.bots.TestingBot
 import best.spaghetcodes.duckdueller.utils.ChatUtils
 import best.spaghetcodes.duckdueller.utils.Config
 import net.minecraft.command.CommandBase
@@ -14,6 +18,9 @@ object Commands {
      * /duck command
      */
     class DuckCommand : CommandBase() {
+
+        private val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot())
+
         override fun getCommandName(): String {
             return "duck"
         }
@@ -41,7 +48,25 @@ object Commands {
                         ChatUtils.info("/duck rqDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before re-queueing")
                         ChatUtils.info("/duck maxDistanceLook <blocks> - ${EnumChatFormatting.ITALIC}Bot view distance")
                         ChatUtils.info("/duck maxDistanceAttack <blocks> - ${EnumChatFormatting.ITALIC}Bot attack distance")
+                        ChatUtils.info("/duck api <apiKey> - ${EnumChatFormatting.ITALIC}Your Hypixel API key (or do /api new)")
+                        ChatUtils.info("/duck bot <bot> - ${EnumChatFormatting.ITALIC}Set the bot (/duck bot list)")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
+                    }
+                    "bot" -> {
+                        if (args.size == 1) {
+                            ChatUtils.info("Current selected bot: ${EnumChatFormatting.GREEN}${DuckDueller.getBot()?.getName()}")
+                        } else {
+                            if (args[1].lowercase() == "list") {
+                                ChatUtils.info("Available bots: ${bots.keys.joinToString(", ")}")
+                            } else {
+                                if (args[1].lowercase() in bots.keys) {
+                                    DuckDueller.setBot(bots[args[1].lowercase()]!!)
+                                    ChatUtils.info("Bot set to ${EnumChatFormatting.GREEN}${DuckDueller.getBot()?.getName()}")
+                                } else {
+                                    ChatUtils.error("Bot not found.")
+                                }
+                            }
+                        }
                     }
                     else -> {
                         // make sure the value is in the config
