@@ -3,6 +3,7 @@ package best.spaghetcodes.duckdueller.bot.player
 import best.spaghetcodes.duckdueller.DuckDueller
 import best.spaghetcodes.duckdueller.utils.ChatUtils
 import best.spaghetcodes.duckdueller.utils.Config
+import best.spaghetcodes.duckdueller.utils.RandomUtils
 import best.spaghetcodes.duckdueller.utils.TimeUtils
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -26,10 +27,12 @@ object Queue {
     }
 
     fun leaveGame() {
-        DuckDueller.mc.thePlayer.sendChatMessage("/l")
-        TimeUtils.setTimeout(fun () {
+        if (!DuckDueller.getBot()?.gameStarted!!) {
             DuckDueller.mc.thePlayer.sendChatMessage("/l")
-        }, 500)
+            TimeUtils.setTimeout(fun () {
+                DuckDueller.mc.thePlayer.sendChatMessage("/l")
+            }, 500)
+        }
     }
 
     @SubscribeEvent
@@ -37,6 +40,11 @@ object Queue {
         val unformatted = ev.message.unformattedText
         if (unformatted.matches(Regex(".* has joined \\(./2\\)!"))) {
             inGame = true
+        } else if (unformatted.lowercase().contains("something went wrong trying") || unformatted.lowercase().contains("please don't spam the command")) {
+            TimeUtils.setTimeout(fun () {
+                if (DuckDueller.getBot()?.queueCommand != "")
+                    joinGame(DuckDueller.getBot()?.queueCommand!!)
+            }, RandomUtils.randomIntInRange(6000, 8000))
         }
     }
 
@@ -74,14 +82,16 @@ object Queue {
                     val gson = Gson()
                     val p = gson.fromJson(res, JSONDataClasses.Player::class.java)
                     if (DuckDueller.mc.thePlayer != null && p.name != DuckDueller.mc.thePlayer.displayNameString) {
-                        val stats = getHypixelStats(p.id)
-                        println("Got stats for ${p.name}")
-                        if (stats != null) {
-                            println("Calling onOpponentStats")
-                            DuckDueller.getBot()?.onOpponentStats(p, stats)
-                        } else {
-                            ChatUtils.error("Failed to get stats for ${p.name}, leaving...")
-                            leaveGame()
+                        if (!DuckDueller.getBot()?.playersSent?.contains(p.name)!!) { // sometimes players get sent multiple times, dont send that many requests
+                            val stats = getHypixelStats(p.id)
+                            println("Got stats for ${p.name}")
+                            if (stats != null) {
+                                println("Calling onOpponentStats")
+                                DuckDueller.getBot()?.onOpponentStats(p, stats)
+                            } else {
+                                ChatUtils.error("Failed to get stats for ${p.name}, leaving...")
+                                leaveGame()
+                            }
                         }
                     }
                 }
