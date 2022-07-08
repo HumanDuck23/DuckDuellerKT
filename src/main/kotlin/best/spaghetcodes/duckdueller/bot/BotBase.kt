@@ -6,6 +6,7 @@ import best.spaghetcodes.duckdueller.utils.ChatUtils
 import best.spaghetcodes.duckdueller.utils.Config
 import best.spaghetcodes.duckdueller.utils.EntityUtils
 import best.spaghetcodes.duckdueller.utils.TimeUtils
+import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumChatFormatting
@@ -71,6 +72,11 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
      * Called every tick
      */
     protected open fun onTick() {}
+
+    /**
+     * Called when the opponent's stats have been fetched
+     */
+    open fun onOpponentStats(stats: JsonObject) {}
 
     // Public base methods for every bot
 
