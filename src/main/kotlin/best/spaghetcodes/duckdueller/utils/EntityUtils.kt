@@ -5,6 +5,9 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MathHelper
+import net.minecraft.util.Vec3
+import kotlin.math.cos
+import kotlin.math.sin
 
 object EntityUtils {
 
@@ -100,6 +103,11 @@ object EntityUtils {
             val diffZ = player.posZ - target.posZ
             MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ).toFloat()
         }
+    }
+
+    fun get2dLookVec(entity: Entity): Vec3 {
+        val yaw = ((entity.rotationYaw + 90)  * Math.PI) / 180
+        return Vec3(cos(yaw), 0.0, sin(yaw))
     }
 
 }
