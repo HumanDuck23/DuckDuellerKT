@@ -28,11 +28,13 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
                 if (msg.message != null) {
                     val unformatted = msg.message.unformattedText.lowercase()
                     if (unformatted.contains("won the duel!") && DuckDueller.mc.thePlayer != null) {
-                        println("end of duel title!")
                         if (unformatted.contains(DuckDueller.mc.thePlayer.displayNameString.lowercase())) {
                             Session.wins++
                         } else {
                             Session.losses++
+                            val p = ChatUtils.removeFormatting(msg.message.unformattedText).split("won")[0].trim()
+                            ChatUtils.info("Adding $p to the list of players to dodge...")
+                            DuckDueller.getBot()?.playersLost?.add(p)
                         }
                         ChatUtils.info(Session.getSession())
                     }
