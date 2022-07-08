@@ -48,7 +48,7 @@ object Commands {
                         ChatUtils.info("/duck rqDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before re-queueing")
                         ChatUtils.info("/duck maxDistanceLook <blocks> - ${EnumChatFormatting.ITALIC}Bot view distance")
                         ChatUtils.info("/duck maxDistanceAttack <blocks> - ${EnumChatFormatting.ITALIC}Bot attack distance")
-                        ChatUtils.info("/duck api <apiKey> - ${EnumChatFormatting.ITALIC}Your Hypixel API key (or do /api new)")
+                        ChatUtils.info("/duck apiKey <apiKey> - ${EnumChatFormatting.ITALIC}Your Hypixel API key (or do /api new)")
                         ChatUtils.info("/duck bot <bot> - ${EnumChatFormatting.ITALIC}Set the bot (/duck bot list)")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }
