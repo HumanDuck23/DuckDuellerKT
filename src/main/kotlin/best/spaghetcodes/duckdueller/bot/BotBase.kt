@@ -1,5 +1,6 @@
 package best.spaghetcodes.duckdueller.bot
 
+import best.spaghetcodes.duckdueller.bot.player.JSONDataClasses
 import best.spaghetcodes.duckdueller.control.KeyBindings
 import best.spaghetcodes.duckdueller.bot.player.Queue
 import best.spaghetcodes.duckdueller.utils.ChatUtils
@@ -76,7 +77,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     /**
      * Called when the opponent's stats have been fetched
      */
-    open fun onOpponentStats(stats: JsonObject) {}
+    open fun onOpponentStats(p: JSONDataClasses.Player, stats: JsonObject) {}
 
     // Public base methods for every bot
 
