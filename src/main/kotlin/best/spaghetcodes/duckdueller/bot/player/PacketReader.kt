@@ -9,9 +9,9 @@ import io.netty.channel.SimpleChannelInboundHandler
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
 import net.minecraft.network.play.server.S45PacketTitle
+import net.minecraft.network.play.server.S3EPacketTeams
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import java.util.*
 
 @ChannelHandler.Sharable
 class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
@@ -38,6 +38,8 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
                     }
                 }
             }, 1000)
+        } else if (msg is S3EPacketTeams) {
+            Queue.teamPacket(msg)
         }
         ctx.fireChannelRead(msg)
     }
