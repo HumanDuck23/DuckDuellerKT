@@ -1,5 +1,8 @@
 package best.spaghetcodes.duckdueller.bot.player
 
+import best.spaghetcodes.duckdueller.DuckDueller
+import best.spaghetcodes.duckdueller.utils.ChatUtils
+import best.spaghetcodes.duckdueller.utils.TimeUtils
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
@@ -8,6 +11,7 @@ import net.minecraft.network.Packet
 import net.minecraft.network.play.server.S45PacketTitle
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
+import java.util.*
 
 @ChannelHandler.Sharable
 class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
@@ -19,8 +23,21 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
     }
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Packet<INetHandler>) {
-        if (msg is S45PacketTitle) {
-            // im too tired to implement this rn but it works
+        if (msg is S45PacketTitle && DuckDueller.mc.theWorld != null) {
+            TimeUtils.setTimeout(fun () {
+                if (msg.message != null) {
+                    val unformatted = msg.message.unformattedText.lowercase()
+                    if (unformatted.contains("won the duel!") && DuckDueller.mc.thePlayer != null) {
+                        println("end of duel title!")
+                        if (unformatted.contains(DuckDueller.mc.thePlayer.displayNameString.lowercase())) {
+                            Session.wins++
+                        } else {
+                            Session.losses++
+                        }
+                        ChatUtils.info(Session.getSession())
+                    }
+                }
+            }, 1000)
         }
         ctx.fireChannelRead(msg)
     }
