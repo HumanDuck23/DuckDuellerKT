@@ -1,15 +1,42 @@
 package best.spaghetcodes.duckdueller.bot.bots
 
 import best.spaghetcodes.duckdueller.bot.BotBase
-import best.spaghetcodes.duckdueller.bot.player.Combat
-import best.spaghetcodes.duckdueller.bot.player.Mouse
-import best.spaghetcodes.duckdueller.bot.player.Movement
+import best.spaghetcodes.duckdueller.bot.player.*
 import best.spaghetcodes.duckdueller.utils.*
+import com.google.gson.JsonObject
+import net.minecraft.util.EnumChatFormatting
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
 
     override fun getName(): String {
         return "Sumo"
+    }
+
+    override fun onOpponentStats(p: JSONDataClasses.Player, stats: JsonObject) {
+        if (isToggled() && !gameStarted && stats.get("success").asBoolean) {
+            val player = stats.get("player").asJsonObject
+            val duels = player.get("stats").asJsonObject.get("Duels").asJsonObject
+
+            var cws = duels.get("current_sumo_winstreak")?.asInt
+            var wins = duels.get("sumo_duel_wins")?.asInt
+            var losses = duels.get("sumo_duel_losses")?.asInt
+
+            if (cws == null)
+                cws = 0
+            if (wins == null)
+                wins = 0
+            if (losses == null)
+                losses = 0
+
+            val wlr = wins.toFloat() / (if (losses == 0) 1F else losses.toFloat())
+
+            onParsedStats(p, wins, wlr, cws)
+        } else {
+            ChatUtils.error("Error reading stats, leaving game...")
+            Queue.leaveGame()
+        }
     }
 
     override fun onGameStart() {
