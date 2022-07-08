@@ -13,6 +13,10 @@ object WorldUtils {
         return airCheck(player.position, distance, EntityUtils.get2dLookVec(player))
     }
 
+    fun airInBack(player: EntityPlayer, distance: Float): Boolean {
+        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(180f))
+    }
+
     fun airOnLeft(player: EntityPlayer, distance: Float): Boolean {
         return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 30, 60)
     }
