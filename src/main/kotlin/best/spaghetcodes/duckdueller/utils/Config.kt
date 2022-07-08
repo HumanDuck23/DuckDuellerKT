@@ -21,6 +21,10 @@ object Config {
         config["maxDistanceLook"] = 150
         config["maxDistanceAttack"] = 15
         config["apiKey"] = ""
+        config["dodgeWins"] = 4000
+        config["dodgeWS"] = 20
+        config["dodgeWLR"] = 4
+        config["dodgeLost"] = true
     }
 
     fun load() {

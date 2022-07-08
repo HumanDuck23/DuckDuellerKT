@@ -49,6 +49,10 @@ object Commands {
                         ChatUtils.info("/duck maxDistanceLook <blocks> - ${EnumChatFormatting.ITALIC}Bot view distance")
                         ChatUtils.info("/duck maxDistanceAttack <blocks> - ${EnumChatFormatting.ITALIC}Bot attack distance")
                         ChatUtils.info("/duck apiKey <apiKey> - ${EnumChatFormatting.ITALIC}Your Hypixel API key (or do /api new)")
+                        ChatUtils.info("/duck dodgeWins <wins> - ${EnumChatFormatting.ITALIC}Amount of wins you want to dodge")
+                        ChatUtils.info("/duck dodgeWS <ws> - ${EnumChatFormatting.ITALIC}Winstreak you want to dodge")
+                        ChatUtils.info("/duck dodgeWLR <wlr> - ${EnumChatFormatting.ITALIC}W/L you want to dodge")
+                        ChatUtils.info("/duck dodgeLost <true/false> - ${EnumChatFormatting.ITALIC}Dodge people the bot lost to?")
                         ChatUtils.info("/duck bot <bot> - ${EnumChatFormatting.ITALIC}Set the bot (/duck bot list)")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }
@@ -90,6 +94,10 @@ object Commands {
                                         }
                                         Config.set(args[0], message)
                                         ChatUtils.info("${EnumChatFormatting.GREEN}Successfully set ${args[0]} to ${EnumChatFormatting.BOLD}$message")
+                                    }
+                                    is Boolean -> {
+                                        Config.set(args[0], args[1].toBoolean())
+                                        ChatUtils.info("${EnumChatFormatting.GREEN}Successfully set ${args[0]} to ${EnumChatFormatting.BOLD}${Config.get(args[0])}")
                                     }
                                 }
                                 Config.save()
