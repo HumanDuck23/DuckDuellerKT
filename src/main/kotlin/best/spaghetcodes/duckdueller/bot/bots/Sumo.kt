@@ -4,6 +4,7 @@ import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.player.*
 import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.JsonObject
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumChatFormatting
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -108,6 +109,13 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 Movement.stopForward()
             } else {
                 Movement.startForward()
+            }
+
+            if (opponent != null && opponent is EntityPlayer) {
+                if (WorldUtils.airInBack(opponent!!, 2.5f) || WorldUtils.airOnLeft(opponent!!, 2.5f) || WorldUtils.airOnRight(
+                        opponent!!, 2.5f)) {
+                    Combat.stopRandomStrafe()
+                }
             }
 
             // don't walk off an edge
