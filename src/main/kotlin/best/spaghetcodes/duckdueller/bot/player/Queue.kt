@@ -23,7 +23,8 @@ object Queue {
     var inGame = false
 
     fun joinGame(msg: String) {
-        DuckDueller.mc.thePlayer.sendChatMessage(msg)
+        if (!DuckDueller.getBot()?.gameStarted!!)
+            DuckDueller.mc.thePlayer.sendChatMessage(msg)
     }
 
     fun leaveGame() {
