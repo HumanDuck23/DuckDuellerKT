@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MathHelper
 import net.minecraft.util.Vec3
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -47,19 +48,65 @@ object EntityUtils {
      *
      * @param target target entity
      * @param raw If true, only returns difference in yaw and pitch instead of values needed
+     * @param center If true, returns values to look at the player's face, if false, returns the values to look at the closest point in the hitbox
      * @return float[] - {yaw, pitch}
      */
-    fun getRotations(player: EntityPlayer?, target: Entity?, raw: Boolean): FloatArray? {
+    fun getRotations(player: EntityPlayer?, target: Entity?, raw: Boolean, center: Boolean = false): FloatArray? {
         return if (target == null || player == null) {
             null
         } else {
-            val diffX = target.posX - player.posX
-            val diffY: Double = if (target is EntityLivingBase) {
-                target.posY + target.eyeHeight.toDouble() - (player.posY + player.getEyeHeight().toDouble())
+            var pos: Vec3? = null
+            if (center) {
+                pos = Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
             } else {
-                (target.entityBoundingBox.minY + target.entityBoundingBox.maxY) / 2.0 - (player.posY + player.getEyeHeight().toDouble())
+                val box = target.entityBoundingBox
+
+                // get the four corners of the hitbox
+                val corner1 = Vec3(box.minX, target.posY + target.eyeHeight, box.minZ)
+                val corner2 = Vec3(box.maxX, target.posY + target.eyeHeight, box.minZ)
+                val corner3 = Vec3(box.minX, target.posY + target.eyeHeight, box.maxZ)
+                val corner4 = Vec3(box.maxX, target.posY + target.eyeHeight, box.maxZ)
+
+                // get the closest 2 corners
+                val closest = getClosestCorner(corner1, corner2, corner3, corner4)
+                var a = closest[0]
+                var b = closest[1]
+
+                val p = Vec3(player.posX, player.posY + player.eyeHeight, player.posZ)
+
+                // since the two corners are either always on the same X or same Z position, we don't need complicated math
+                if (a.zCoord == b.zCoord) {
+                    if (a.xCoord > b.xCoord) {
+                        val temp = a
+                        a = b
+                        b = temp
+                    }
+                    if (p.xCoord < a.xCoord) {
+                        pos = a
+                    } else if (p.xCoord > b.xCoord) {
+                        pos = b
+                    } else {
+                        pos = Vec3(p.xCoord, a.yCoord, a.zCoord)
+                    }
+                } else {
+                    if (a.zCoord > b.zCoord) {
+                        val temp = a
+                        a = b
+                        b = temp
+                    }
+                    if (p.zCoord < a.zCoord) {
+                        pos = a
+                    } else if (p.zCoord > b.zCoord) {
+                        pos = b
+                    } else {
+                        pos = Vec3(a.xCoord, a.yCoord, p.zCoord)
+                    }
+                }
             }
-            val diffZ = target.posZ - player.posZ
+
+            val diffX = pos.xCoord - player.posX
+            val diffY: Double = pos.yCoord - (player.posY + player.getEyeHeight().toDouble())
+            val diffZ = pos.zCoord - player.posZ
             val dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ).toDouble()
             val yaw = (Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793).toFloat() - 90.0f
             val pitch = (-(Math.atan2(diffY, dist) * 180.0 / 3.141592653589793)).toFloat()
@@ -108,6 +155,15 @@ object EntityUtils {
     fun get2dLookVec(entity: Entity): Vec3 {
         val yaw = ((entity.rotationYaw + 90)  * Math.PI) / 180
         return Vec3(cos(yaw), 0.0, sin(yaw))
+    }
+
+    private fun getClosestCorner(corner1: Vec3, corner2: Vec3, corner3: Vec3, corner4: Vec3): ArrayList<Vec3> {
+        val pos = Vec3(DuckDueller.mc.thePlayer.posX, DuckDueller.mc.thePlayer.posY + DuckDueller.mc.thePlayer.eyeHeight, DuckDueller.mc.thePlayer.posZ)
+
+        val smallest = arrayListOf(corner1, corner2, corner3, corner4)
+        smallest.sortBy { abs(pos.distanceTo(it)) }
+
+        return arrayListOf(smallest[0], smallest[1])
     }
 
 }
