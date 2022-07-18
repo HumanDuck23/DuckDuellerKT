@@ -39,8 +39,10 @@ object WebHook {
             }
         } catch (e: Exception) {
             println("bruh")
+            println(conn.responseMessage)
             println(conn.errorStream)
-            //e.printStackTrace()
+            e.printStackTrace()
+            // just print all the messages
         }
     }
 
