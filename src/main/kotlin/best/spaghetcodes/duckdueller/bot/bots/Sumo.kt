@@ -44,7 +44,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         Movement.startSprinting()
         Movement.startForward()
         Mouse.startLeftAC()
-        Combat.startRandomStrafe(600, 1100)
+        Combat.startRandomStrafe(400, 1100)
     }
 
     override fun onGameEnd() {
@@ -83,7 +83,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         if (isToggled() && gameStarted && opponent != null && mc.theWorld != null && mc.thePlayer != null) {
             val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
 
-            if (distance > 6) {
+            if (distance > 2) {
                 /*val rotations = EntityUtils.getRotations(mc.thePlayer, opponent, true)
                 if (rotations != null) {
                     if (rotations[0] < 0) {
@@ -94,11 +94,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                         Movement.startLeft()
                     }
                 }*/
-                Combat.startRandomStrafe(500, 800)
-            } else {
-                if (combo < 1 && distance > 2) {
-                    Combat.startRandomStrafe(200, 500)
-                }
+                Combat.startRandomStrafe(500, 1100)
             }
 
             if (distance <= 2) {
