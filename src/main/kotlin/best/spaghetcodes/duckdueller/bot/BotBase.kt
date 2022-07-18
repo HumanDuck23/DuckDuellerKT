@@ -42,6 +42,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     var playersLost = ArrayList<String>()
     var gotStats = false
 
+    var lastOpponentName = ""
+
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
         return "Base"
@@ -150,6 +152,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         // yes this is a feature
         if (gameStarted) {
             val foundOpponent = getOpponentEntity()
+            if (foundOpponent) {
+                lastOpponentName = opponent?.displayNameString ?: ""
+            }
             if (foundOpponent && !calledFoundOpponent) {
                 calledFoundOpponent = true
                 onFoundOpponent()
