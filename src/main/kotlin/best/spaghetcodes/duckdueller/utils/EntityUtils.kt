@@ -66,7 +66,7 @@ object EntityUtils {
 
                 if (!player.onGround) {
                     yPos = target.posY + target.eyeHeight
-                } else if (!target.onGround) {
+                } else if (abs(target.posY - player.posY) > player.eyeHeight) {
                     yPos = target.posY + target.eyeHeight / 2f
                 }
 
