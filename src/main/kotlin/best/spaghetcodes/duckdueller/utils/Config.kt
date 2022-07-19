@@ -46,6 +46,9 @@ object Config {
                             is String -> {
                                 config[split[0]] = split[1]
                             }
+                            is Boolean -> {
+                                config[split[0]] = split[1].toBoolean()
+                            }
                         }
                     }
                 }
