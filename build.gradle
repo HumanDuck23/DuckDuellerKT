@@ -30,7 +30,7 @@ dependencies {
     // you can use implementation (This will not add the library to your jar decreasing the size)
     // The Kotlin Stdlib is about 2MB
     include "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+    //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
     implementation('com.google.code.gson:gson:2.9.0')
     // How to normally add a dependency (If you don"t want it to be added to the jar)
     // implementation "com.example:example:1.0.0"
