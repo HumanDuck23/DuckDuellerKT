@@ -124,7 +124,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 Movement.startForward()
                 Movement.clearLeftRight()
             }
-            if (leftEdge(3f) || leftEdge(3f)) {
+            if (leftEdge(3f) || rightEdge(3f)) {
                 Movement.swapLeftRight()
             }
         }
