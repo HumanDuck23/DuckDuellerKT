@@ -62,10 +62,18 @@ object EntityUtils {
                 val box = target.entityBoundingBox
 
                 // get the four corners of the hitbox
-                val corner1 = Vec3(box.minX, target.posY + target.eyeHeight, box.minZ)
-                val corner2 = Vec3(box.maxX, target.posY + target.eyeHeight, box.minZ)
-                val corner3 = Vec3(box.minX, target.posY + target.eyeHeight, box.maxZ)
-                val corner4 = Vec3(box.maxX, target.posY + target.eyeHeight, box.maxZ)
+                var yPos = player.posY + player.eyeHeight
+
+                if (!player.onGround) {
+                    yPos = target.posY + target.eyeHeight
+                } else if (!target.onGround) {
+                    yPos = target.posY + target.eyeHeight / 2f
+                }
+
+                val corner1 = Vec3(box.minX, yPos, box.minZ)
+                val corner2 = Vec3(box.maxX, yPos, box.minZ)
+                val corner3 = Vec3(box.minX, yPos, box.maxZ)
+                val corner4 = Vec3(box.maxX, yPos, box.maxZ)
 
                 // get the closest 2 corners
                 val closest = getClosestCorner(corner1, corner2, corner3, corner4)
