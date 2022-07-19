@@ -1,26 +1,25 @@
 package best.spaghetcodes.duckdueller.bot.player
 
 import best.spaghetcodes.duckdueller.DuckDueller
-import best.spaghetcodes.duckdueller.utils.ChatUtils
-import best.spaghetcodes.duckdueller.utils.Config
-import best.spaghetcodes.duckdueller.utils.RandomUtils
-import best.spaghetcodes.duckdueller.utils.TimeUtils
+import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import net.minecraft.network.play.server.S3EPacketTeams
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStreamReader
 import java.net.URL
+import kotlin.concurrent.thread
 
 object Queue {
 
     var inGame = false
+    val playerCache = HashMap<String, String>()
 
     fun joinGame(msg: String) {
         if (!DuckDueller.getBot()?.gameStarted!!)
@@ -61,8 +60,33 @@ object Queue {
         inGame = false
     }
 
+    private fun logTeamPacket(packet: S3EPacketTeams) {
+        val file = File(DuckDueller.mc.mcDataDir.absolutePath + "/logs/duckdueller_teampackets.txt")
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+
+        FileOutputStream(file, true).bufferedWriter().use { writer ->
+            writer.write("===============================================\n")
+            writer.write("func_149312_c: ${packet.func_149312_c()}\n")
+            writer.write("func_149306_d: ${packet.func_149306_d()}\n")
+            writer.write("func_149311_e: ${packet.func_149311_e()}\n")
+            writer.write("func_149309_f: ${packet.func_149309_f()}\n")
+            writer.write("func_149310_g: ${packet.func_149310_g().joinToString(", ")}\n")
+            writer.write("func_149307_h: ${packet.func_149307_h()}\n")
+            writer.write("func_149308_i: ${packet.func_149308_i()}\n")
+            writer.write("func_179813_h: ${packet.func_179813_h()}\n")
+            writer.write("func_179814_i: ${packet.func_179814_i()}\n")
+        }
+    }
+
     fun teamPacket(packet: S3EPacketTeams) {
-        if (packet.func_149307_h() == 3) { // mode 3 is for adding entities to a team
+        /*TimeUtils.setTimeout(fun () {
+            if (inGame) {
+                logTeamPacket(packet)
+            }
+        }, 150)*/
+        if (packet.func_149307_h() == 3 && packet.func_149312_c() == "§7§k") { // mode 3 is for adding entities to a team
             val entities = packet.func_149310_g() // this is the entity list
             for (entity in entities) {
                 if (entity.length > 2) { // hypixel sends fake entities with the names just being an emoji (??? why lol)
@@ -75,24 +99,32 @@ object Queue {
 
     private fun checkPlayer(player: String) {
         // https://api.mojang.com/users/profiles/minecraft/<player>
-        runBlocking {
-            launch {
+        thread {
+            var p: JSONDataClasses.Player? = null
+            if (playerCache.containsKey(player)) {
+                //ChatUtils.info("Player $player is already in the cache")
+                p = JSONDataClasses.Player(player, playerCache[player]!!)
+            } else {
                 val res = unameToUUID(player)
+                //ChatUtils.info("Checking $player")
                 if (res != "") { // api returns 204 no content for invalid players
                     println("Deserializing $res")
                     val gson = Gson()
-                    val p = gson.fromJson(res, JSONDataClasses.Player::class.java)
-                    if (DuckDueller.mc.thePlayer != null && p.name != DuckDueller.mc.thePlayer.displayNameString) {
-                        if (!DuckDueller.getBot()?.playersSent?.contains(p.name)!!) { // sometimes players get sent multiple times, dont send that many requests
-                            val stats = getHypixelStats(p.id)
-                            println("Got stats for ${p.name}")
-                            if (stats != null) {
-                                println("Calling onOpponentStats")
-                                DuckDueller.getBot()?.onOpponentStats(p, stats)
-                            } else {
-                                ChatUtils.error("Failed to get stats for ${p.name}, leaving...")
-                                leaveGame()
-                            }
+                    p = gson.fromJson(res, JSONDataClasses.Player::class.java)
+                }
+            }
+            if (p != null) {
+                playerCache[player] = p.id
+                if (DuckDueller.mc.thePlayer != null && p.name != DuckDueller.mc.thePlayer.displayNameString) {
+                    if (!DuckDueller.getBot()?.playersSent?.contains(p.name)!!) { // sometimes players get sent multiple times, dont send that many requests
+                        val stats = getHypixelStats(p.id)
+                        println("Got stats for ${p.name}")
+                        if (stats != null) {
+                            println("Calling onOpponentStats")
+                            DuckDueller.getBot()?.onOpponentStats(p, stats)
+                        } else {
+                            ChatUtils.error("Failed to get stats for ${p.name}, leaving...")
+                            leaveGame()
                         }
                     }
                 }
