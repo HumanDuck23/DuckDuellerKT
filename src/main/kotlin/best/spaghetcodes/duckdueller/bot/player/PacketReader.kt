@@ -59,7 +59,7 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
 
                         WebHook.sendEmbed(
                             Config.get("webhook").toString(),
-                            WebHook.buildEmbed("${if (iWon) ":smirk:" else ":confused:"} Game ${if (iWon) "WON" else "LOST"}!", fields, footer, author, thumbnail, 0xffffff))
+                            WebHook.buildEmbed("${if (iWon) ":smirk:" else ":confused:"} Game ${if (iWon) "WON" else "LOST"}!", fields, footer, author, thumbnail, if (iWon) 0x66ed8a else 0xed6d66))
 
                     }
                 }
