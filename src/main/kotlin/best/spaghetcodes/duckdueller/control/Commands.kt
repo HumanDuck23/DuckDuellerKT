@@ -53,6 +53,7 @@ object Commands {
                         ChatUtils.info("/duck dodgeWS <ws> - ${EnumChatFormatting.ITALIC}Winstreak you want to dodge")
                         ChatUtils.info("/duck dodgeWLR <wlr> - ${EnumChatFormatting.ITALIC}W/L you want to dodge")
                         ChatUtils.info("/duck dodgeLost <true/false> - ${EnumChatFormatting.ITALIC}Dodge people the bot lost to?")
+                        ChatUtils.info("/duck dodgeNoStats <true/false> - ${EnumChatFormatting.ITALIC}Dodge when no stats are found (nicked or hypixel didn't send)")
                         ChatUtils.info("/duck bot <bot> - ${EnumChatFormatting.ITALIC}Set the bot (/duck bot list)")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }

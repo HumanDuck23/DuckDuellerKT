@@ -25,6 +25,7 @@ object Config {
         config["dodgeWS"] = 20
         config["dodgeWLR"] = 4
         config["dodgeLost"] = true
+        config["dodgeNoStats"] = true
     }
 
     fun load() {

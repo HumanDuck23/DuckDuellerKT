@@ -190,7 +190,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         if (isToggled()) {
             val unformatted = ev.message.unformattedText
 
-            if (unformatted.contains("The game starts in 2 seconds!") && !gotStats) {
+            if (unformatted.contains("The game starts in 2 seconds!") && !gotStats && Config.get("dodgeNoStats") as Boolean) {
                 ChatUtils.info("Didn't find any stats, leaving game...")
                 Queue.leaveGame()
                 TimeUtils.setTimeout(fun() { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
