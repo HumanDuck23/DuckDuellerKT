@@ -55,6 +55,7 @@ object Commands {
                         ChatUtils.info("/duck dodgeLost <true/false> - ${EnumChatFormatting.ITALIC}Dodge people the bot lost to?")
                         ChatUtils.info("/duck dodgeNoStats <true/false> - ${EnumChatFormatting.ITALIC}Dodge when no stats are found (nicked or hypixel didn't send)")
                         ChatUtils.info("/duck bot <bot> - ${EnumChatFormatting.ITALIC}Set the bot (/duck bot list)")
+                        ChatUtils.info("/duck rc - ${EnumChatFormatting.ITALIC}Reload the config file")
                         ChatUtils.info("${EnumChatFormatting.DARK_GRAY}--------------------------------------")
                     }
                     "bot" -> {
@@ -72,6 +73,10 @@ object Commands {
                                 }
                             }
                         }
+                    }
+                    "rc" -> {
+                        Config.load()
+                        ChatUtils.info("Config reloaded.")
                     }
                     else -> {
                         // make sure the value is in the config
