@@ -21,12 +21,12 @@ in a while to see how it's going.
 <div style="font-size: 12pt; font-family: 'Lato', sans-serif;">
 	<ul>
 		<li>✅ Realistic Aim</li>
-		<li>🚧 Realistic Strafing</li>
-		<li>🚧 Stat-based Queue Dodging</li>
+		<li>✅ Realistic Strafing (Needs work to avoid edges)</li>
+		<li>✅ Stat-based Queue Dodging</li>
 		<li>🚧 Multiple Gamemode Support</li>
-		<li>🚧 Multiple Failsafes</li>
-		<li>🚧 Discord Webhook Integration</li>
-		<li>🚧 Lots of Customization</li>
+		<li>✅ Multiple Failsafes</li>
+		<li>✅ Discord Webhook Integration</li>
+		<li>✅ Lots of Customization</li>
 	</ul>
 </div>
 <hr>
