@@ -18,11 +18,11 @@ object WorldUtils {
     }
 
     fun airOnLeft(player: EntityPlayer, distance: Float): Boolean {
-        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 30, 60)
+        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 45, 75)
     }
 
     fun airOnRight(player: EntityPlayer, distance: Float): Boolean {
-        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 30, 60)
+        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 45, 75)
     }
 
     // Circular air check - rotates lookVec a little to find air that's not right next to the player
@@ -30,13 +30,13 @@ object WorldUtils {
     private fun circleAirCheck(pos: BlockPos, distance: Float, lookVec: Vec3, rF: Int, rB: Int): Boolean {
         for (i in 0..rF step 5) {
             val nLookVec = lookVec.rotateYaw(i.toFloat())
-            if (airCheck(pos, distance, nLookVec)) {
+            if (airCheck(pos, distance + i, nLookVec)) {
                 return true
             }
         }
         for (i in 0 downTo -rB step 5) {
             val nLookVec = lookVec.rotateYaw(i.toFloat())
-            if (airCheck(pos, distance, nLookVec)) {
+            if (airCheck(pos, distance + i, nLookVec)) {
                 return true
             }
         }

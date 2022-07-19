@@ -72,11 +72,11 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
     }
 
     fun leftEdge(distance: Float): Boolean {
-        return (WorldUtils.airOnLeft(mc.thePlayer, distance) && (!Movement.right() && Movement.left()) && combo <= 1)
+        return (WorldUtils.airOnLeft(mc.thePlayer, distance) && combo <= 1)
     }
 
     fun rightEdge(distance: Float): Boolean {
-        return (WorldUtils.airOnRight(mc.thePlayer, distance) && (!Movement.left() && Movement.right()) && combo <= 1)
+        return (WorldUtils.airOnRight(mc.thePlayer, distance) && combo <= 1)
     }
 
     override fun onTick() {
@@ -108,8 +108,8 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             }
 
             if (opponent != null && opponent is EntityPlayer) {
-                if (WorldUtils.airInBack(opponent!!, 2.5f) || WorldUtils.airOnLeft(opponent!!, 2.5f) || WorldUtils.airOnRight(
-                        opponent!!, 2.5f)) {
+                if ((WorldUtils.airInBack(opponent!!, 2.5f) || WorldUtils.airOnLeft(opponent!!, 2.5f) || WorldUtils.airOnRight(
+                        opponent!!, 2.5f)) && !(leftEdge(3f) || rightEdge(3f))) {
                     Combat.stopRandomStrafe()
                 }
             }
@@ -124,8 +124,13 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 Movement.startForward()
                 Movement.clearLeftRight()
             }
-            if (leftEdge(3f) || rightEdge(3f)) {
-                Movement.swapLeftRight()
+
+            if (leftEdge(4f)) {
+                Movement.stopLeft()
+                Movement.startRight()
+            } else if (rightEdge(4f)) {
+                Movement.stopRight()
+                Movement.startLeft()
             }
         }
     }
