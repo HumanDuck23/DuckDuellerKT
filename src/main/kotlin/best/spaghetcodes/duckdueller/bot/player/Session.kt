@@ -12,7 +12,7 @@ object Session {
     fun getSession(): String {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
-        val ratio = df.format(wins.toFloat() / (if (losses == 1) 1F else losses.toFloat()))
+        val ratio = df.format(wins.toFloat() / (if (losses == 0) 1F else losses.toFloat()))
         return "Session: ${EnumChatFormatting.GREEN}Wins: $wins${EnumChatFormatting.RESET} - ${EnumChatFormatting.RED}Losses: $losses${EnumChatFormatting.RESET} - W/L: ${EnumChatFormatting.LIGHT_PURPLE}${ratio}${EnumChatFormatting.RESET}"
     }
 
