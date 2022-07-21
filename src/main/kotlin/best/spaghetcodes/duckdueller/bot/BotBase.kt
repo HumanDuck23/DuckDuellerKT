@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.Vec3
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -34,6 +35,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     var gameStarted = false
 
     private var ticksSinceLastHit = 0
+
+    protected var opponentPositions = ArrayList<Vec3>() // tracks opponent position back 20 ticks
 
     protected var combo = 0
     protected var opponentCombo = 0
@@ -228,6 +231,13 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         if (isToggled() && mc.thePlayer != null && opponent != null && EntityUtils.getDistanceNoY(mc.thePlayer, opponent) > 5 && combo > 0) {
             combo = 0
             ChatUtils.info("combo reset")
+        }
+
+        if (isToggled() && opponent != null) {
+            if (opponentPositions.size >= 20) { // should never be larger than 20 but ok
+                opponentPositions.removeAt(opponentPositions.size - 1)
+            }
+            opponentPositions.add(0, opponent!!.positionVector)
         }
     }
 
