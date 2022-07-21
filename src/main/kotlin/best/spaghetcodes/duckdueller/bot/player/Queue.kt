@@ -107,6 +107,12 @@ object Queue {
                     println("Deserializing $res")
                     val gson = Gson()
                     p = gson.fromJson(res, JSONDataClasses.Player::class.java)
+                } else {
+                    // nick, lets check dodgePlayers anyway
+                    if (DuckDueller.getBot()?.playersLost?.contains(player) == true) {
+                        ChatUtils.info("Lost to $player before, dodging...")
+                        leaveGame()
+                    }
                 }
             }
             if (p != null) {
