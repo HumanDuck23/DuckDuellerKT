@@ -112,6 +112,7 @@ object Queue {
                     if (DuckDueller.getBot()?.playersLost?.contains(player) == true) {
                         ChatUtils.info("Lost to $player before, dodging...")
                         leaveGame()
+                        TimeUtils.setTimeout(fun () { DuckDueller.getBot()?.queueCommand?.let { joinGame(it) } }, RandomUtils.randomIntInRange(4000, 8000))
                     }
                 }
             }
