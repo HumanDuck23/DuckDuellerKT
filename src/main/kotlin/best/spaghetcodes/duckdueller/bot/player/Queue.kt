@@ -29,9 +29,6 @@ object Queue {
     fun leaveGame() {
         if (!DuckDueller.getBot()?.gameStarted!!) {
             DuckDueller.mc.thePlayer.sendChatMessage("/l")
-            TimeUtils.setTimeout(fun () {
-                DuckDueller.mc.thePlayer.sendChatMessage("/l")
-            }, 500)
         }
     }
 
@@ -45,6 +42,10 @@ object Queue {
                 if (DuckDueller.getBot()?.queueCommand != "")
                     joinGame(DuckDueller.getBot()?.queueCommand!!)
             }, RandomUtils.randomIntInRange(6000, 8000))
+        } else if (unformatted.contains("Are you sure? Type /lobby again")) {
+            TimeUtils.setTimeout(fun () {
+                DuckDueller.mc.thePlayer.sendChatMessage("/l")
+            }, 500)
         }
     }
 
