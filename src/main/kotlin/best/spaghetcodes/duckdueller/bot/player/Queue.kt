@@ -45,7 +45,7 @@ object Queue {
         } else if (unformatted.contains("Are you sure? Type /lobby again")) {
             TimeUtils.setTimeout(fun () {
                 DuckDueller.mc.thePlayer.sendChatMessage("/l")
-            }, 500)
+            }, 50)
         }
     }
 
