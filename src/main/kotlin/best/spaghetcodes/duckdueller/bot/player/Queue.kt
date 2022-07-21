@@ -81,17 +81,12 @@ object Queue {
     }
 
     fun teamPacket(packet: S3EPacketTeams) {
-        /*TimeUtils.setTimeout(fun () {
-            if (inGame) {
-                logTeamPacket(packet)
-            }
-        }, 150)*/
         if (packet.func_149307_h() == 3 && packet.func_149312_c() == "§7§k") { // mode 3 is for adding entities to a team
             val entities = packet.func_149310_g() // this is the entity list
             for (entity in entities) {
                 if (entity.length > 2) { // hypixel sends fake entities with the names just being an emoji (??? why lol)
                     // small delay for the inGame state to update
-                    TimeUtils.setTimeout(fun() { if (inGame) { checkPlayer(entity) } }, 150)
+                    TimeUtils.setTimeout(fun() { if (inGame) { checkPlayer(entity) } }, 1500)
                 }
             }
         }
