@@ -30,14 +30,18 @@ object WorldUtils {
     private fun circleAirCheck(pos: BlockPos, distance: Float, lookVec: Vec3, rF: Int, rB: Int): Boolean {
         for (i in 0..rF step 5) {
             val nLookVec = lookVec.rotateYaw(i.toFloat())
-            if (airCheck(pos, distance + i, nLookVec)) {
-                return true
+            for (j in 1..distance.toInt()) {
+                if (airCheck(pos, (j + i).toFloat(), nLookVec)) {
+                    return true
+                }
             }
         }
         for (i in 0 downTo -rB step 5) {
             val nLookVec = lookVec.rotateYaw(i.toFloat())
-            if (airCheck(pos, distance + i, nLookVec)) {
-                return true
+            for (j in 1..distance.toInt()) {
+                if (airCheck(pos, (j + i).toFloat(), nLookVec)) {
+                    return true
+                }
             }
         }
         return false
