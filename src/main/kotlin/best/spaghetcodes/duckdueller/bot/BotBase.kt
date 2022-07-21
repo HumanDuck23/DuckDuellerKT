@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.acos
 
 /**
  * Base class for all bots
@@ -135,6 +136,38 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         if (dodge) {
             Queue.leaveGame()
             TimeUtils.setTimeout(fun () { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
+        }
+    }
+
+    protected fun opponentMovingRight(): Boolean {
+        val angle = calculateAngleRel()
+        if (angle != null && angle < 90) {
+            return true
+        }
+        return false
+    }
+
+    protected fun opponentMovingLeft(): Boolean {
+        val angle = calculateAngleRel()
+        if (angle != null && angle > 90) {
+            return true
+        }
+        return false
+    }
+
+    private fun calculateAngleRel(): Double? {
+        if (mc.thePlayer != null && opponentPositions.size > 1) {
+            val _leftVec = mc.thePlayer.lookVec.rotateYaw(90f)
+            val leftVec = Vec3(_leftVec.xCoord, 0.0, _leftVec.zCoord)
+
+            val pos1 = if (opponentPositions.size > 10) opponentPositions[9] else opponentPositions[opponentPositions.size - 1]
+            val pos2 = opponentPositions[0]
+            val opponentVec = Vec3(pos2.xCoord - pos1.xCoord, 0.0, pos2.zCoord - pos1.zCoord)
+
+            val angle = acos((leftVec.xCoord * opponentVec.xCoord + leftVec.zCoord * opponentVec.zCoord) / (leftVec.lengthVector() * opponentVec.lengthVector()))
+            return angle
+        } else {
+            return null
         }
     }
 
