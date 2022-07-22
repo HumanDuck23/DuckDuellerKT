@@ -44,7 +44,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         Movement.startSprinting()
         Movement.startForward()
         Mouse.startLeftAC()
-        Combat.startRandomStrafe(400, 1100)
+        //Combat.startRandomStrafe(400, 1100)
     }
 
     override fun onGameEnd() {
@@ -55,15 +55,15 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
     }
 
     override fun onAttack() {
+        println("Attack! Combo: $combo")
         Combat.wTap(80)
-        if (combo >= 1) {
-            Combat.stopRandomStrafe()
-            Movement.clearLeftRight()
-        }
+        //Combat.stopRandomStrafe()
+        Movement.clearLeftRight()
     }
 
     override fun onAttacked() {
         //Combat.shiftTap(150)
+        //Combat.startRandomStrafe(400, 800)
     }
 
     override fun onFoundOpponent() {
@@ -72,46 +72,93 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
     }
 
     fun leftEdge(distance: Float): Boolean {
-        return (WorldUtils.airOnLeft(mc.thePlayer, distance) && combo <= 1)
+        return (WorldUtils.airOnLeft(mc.thePlayer, distance))
     }
 
     fun rightEdge(distance: Float): Boolean {
-        return (WorldUtils.airOnRight(mc.thePlayer, distance) && combo <= 1)
+        return (WorldUtils.airOnRight(mc.thePlayer, distance))
+    }
+
+    fun nearEdge(distance: Float): Boolean { // doesnt check front
+        return (rightEdge(distance) || leftEdge(distance) || WorldUtils.airInBack(mc.thePlayer, distance))
+    }
+
+    fun opponentNearEdge(distance: Float): Boolean {
+        return (WorldUtils.airInBack(opponent!!, distance) || WorldUtils.airOnLeft(opponent!!, distance) || WorldUtils.airOnRight(
+            opponent!!, distance))
     }
 
     override fun onTick() {
         if (isToggled() && gameStarted && opponent != null && mc.theWorld != null && mc.thePlayer != null) {
             val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
 
-            if (distance > 2) {
-                /*val rotations = EntityUtils.getRotations(mc.thePlayer, opponent, true)
-                if (rotations != null) {
-                    if (rotations[0] < 0) {
-                        Movement.stopLeft()
-                        Movement.startRight()
+            val movePriority = arrayListOf(0, 0)
+            var clear = false
+
+            if (WorldUtils.airCheckAngle(mc.thePlayer, 6f, 45f)) {
+                movePriority[1] += 5
+            } else if (WorldUtils.airCheckAngle(mc.thePlayer, 6f, -45f)) {
+                movePriority[0] += 5
+            }
+
+            if (nearEdge(3f) && !opponentNearEdge(2f)) {
+                if (opponentMovingLeft() && !leftEdge(3f)) {
+                    movePriority[0] += 5
+                } else if (opponentMovingRight() && !rightEdge(3f)) {
+                    movePriority[1] += 5
+                }
+            } else {
+                if (opponentNearEdge(3f) && distance in 0.5f..8f && combo <= 1 && ticksSinceLastDamage > 40) {
+                    // Opponent is at the edge, lets mirror their movement to not let them get out of the corner
+                    if (opponentMovingLeft() && !rightEdge(2f)) {
+                        movePriority[1] += 1
+                    } else if (opponentMovingRight() && !leftEdge(2f)) {
+                        movePriority[0] += 1
                     } else {
-                        Movement.stopRight()
-                        Movement.startLeft()
+                        clear = true
                     }
-                }*/
-                Combat.startRandomStrafe(500, 1100)
+                } else {
+                    val rotations = EntityUtils.getRotations(mc.thePlayer, opponent, true)
+                    if (rotations != null) {
+                        if (rotations[0] < 0) {
+                            movePriority[1] += 1
+                        } else {
+                            movePriority[0] += 1
+                        }
+                    }
+                }
             }
 
-            if (distance <= 2) {
+            if (combo >= 1) {
+                clear = true
+                if (combo >= 2 && distance >= 3.2 && mc.thePlayer.onGround && !nearEdge(3f)) {
+                    Movement.singleJump(RandomUtils.randomIntInRange(100, 150))
+                }
+            }
+
+            if (clear) {
                 Combat.stopRandomStrafe()
+                Movement.clearLeftRight()
+            } else {
+                if (movePriority[0] > movePriority[1]) {
+                    Movement.stopRight()
+                    Movement.startLeft()
+                } else if (movePriority[1] > movePriority[0]) {
+                    Movement.stopLeft()
+                    Movement.startRight()
+                } else {
+                    if (RandomUtils.randomBool()) {
+                        Movement.startLeft()
+                    } else {
+                        Movement.startRight()
+                    }
+                }
             }
 
-            if (distance < 1.7) {
+            if (distance < 1) {
                 Movement.stopForward()
             } else {
                 Movement.startForward()
-            }
-
-            if (opponent != null && opponent is EntityPlayer) {
-                if ((WorldUtils.airInBack(opponent!!, 2.5f) || WorldUtils.airOnLeft(opponent!!, 2.5f) || WorldUtils.airOnRight(
-                        opponent!!, 2.5f)) && !(leftEdge(3f) || rightEdge(3f))) {
-                    Combat.stopRandomStrafe()
-                }
             }
 
             // don't walk off an edge
@@ -123,14 +170,6 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             if (WorldUtils.airInBack(mc.thePlayer, 2.5f) && mc.thePlayer.onGround) {
                 Movement.startForward()
                 Movement.clearLeftRight()
-            }
-
-            if (leftEdge(4f)) {
-                Movement.stopLeft()
-                Movement.startRight()
-            } else if (rightEdge(4f)) {
-                Movement.stopRight()
-                Movement.startLeft()
             }
         }
     }
