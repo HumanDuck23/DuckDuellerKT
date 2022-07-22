@@ -54,8 +54,10 @@ object Combat {
     }
 
     fun stopRandomStrafe() {
-        randomStrafe = false
-        Movement.clearLeftRight()
+        if (randomStrafe) {
+            randomStrafe = false
+            Movement.clearLeftRight()
+        }
     }
 
     private fun randomStrafeFunc() {
