@@ -36,6 +36,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     var gameStarted = false
 
     protected var ticksSinceLastHit = 0
+    protected var ticksSinceLastDamage = 0
 
     protected var opponentPositions = ArrayList<Vec3>() // tracks opponent position back 20 ticks
 
@@ -244,6 +245,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     fun onTickEvent(ev: ClientTickEvent) {
         onTick()
         ticksSinceLastHit++
+        ticksSinceLastDamage++
 
         if (KeyBindings.toggleBotKeyBinding.isPressed) {
             toggle()
@@ -256,6 +258,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         }
 
         if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
+            ticksSinceLastDamage = 0
             combo = 0
             opponentCombo++
             onAttacked()
