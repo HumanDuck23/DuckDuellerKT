@@ -15,14 +15,23 @@ class TestingBot : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
     }
 
     override fun onTick() {
-        if (mc.theWorld != null && mc.thePlayer != null && gameStarted) {
+        if (mc.theWorld != null && mc.thePlayer != null) {
             if (WorldUtils.airInFront(mc.thePlayer, 2f)) {
                 Movement.stopForward()
             }
-            if (WorldUtils.airOnLeft(mc.thePlayer, 2f)) {
+
+            if (WorldUtils.airCheckAngle(mc.thePlayer, 4f, 45f)) {
                 Movement.stopLeft()
             }
-            if (WorldUtils.airOnRight(mc.thePlayer, 2f)) {
+
+            if (WorldUtils.airCheckAngle(mc.thePlayer, 4f, -45f)) {
+                Movement.stopRight()
+            }
+
+            if (WorldUtils.airOnLeft(mc.thePlayer, 4f)) {
+                Movement.stopLeft()
+            }
+            if (WorldUtils.airOnRight(mc.thePlayer, 4f)) {
                 Movement.stopRight()
             }
         }
