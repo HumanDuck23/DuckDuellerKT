@@ -18,37 +18,26 @@ object WorldUtils {
     }
 
     fun airOnLeft(player: EntityPlayer, distance: Float): Boolean {
-        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 45, 75)
+        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f))
+        //return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 2, 2)
     }
 
     fun airOnRight(player: EntityPlayer, distance: Float): Boolean {
-        return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 45, 75)
+        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f))
+        //return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 2, 2)
     }
 
-    // Circular air check - rotates lookVec a little to find air that's not right next to the player
-    // rotates in steps of 5
-    private fun circleAirCheck(pos: BlockPos, distance: Float, lookVec: Vec3, rF: Int, rB: Int): Boolean {
-        for (i in 0..rF step 5) {
-            val nLookVec = lookVec.rotateYaw(i.toFloat())
-            for (j in 1..distance.toInt()) {
-                if (airCheck(pos, (j + i).toFloat(), nLookVec)) {
-                    return true
-                }
-            }
-        }
-        for (i in 0 downTo -rB step 5) {
-            val nLookVec = lookVec.rotateYaw(i.toFloat())
-            for (j in 1..distance.toInt()) {
-                if (airCheck(pos, (j + i).toFloat(), nLookVec)) {
-                    return true
-                }
-            }
-        }
-        return false
+    fun airCheckAngle(player: EntityPlayer, distance: Float, angle: Float): Boolean {
+        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(angle))
     }
 
     private fun airCheck(pos: BlockPos, distance: Float, lookVec: Vec3): Boolean {
-        return DuckDueller.mc.theWorld.getBlockState(BlockPos(pos.x + lookVec.xCoord * 2, pos.y - 0.2, pos.z + lookVec.zCoord * 2)).block == Blocks.air
+        for (i in 1..distance.toInt()) {
+            if (DuckDueller.mc.theWorld.getBlockState(BlockPos(pos.x + lookVec.xCoord * i, pos.y - 0.2, pos.z + lookVec.zCoord * i)).block == Blocks.air) {
+                return true
+            }
+        }
+        return false
     }
     
 }
