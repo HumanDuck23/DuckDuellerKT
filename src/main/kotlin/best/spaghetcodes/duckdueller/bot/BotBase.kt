@@ -264,7 +264,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             onAttacked()
         }
 
-        if (isToggled() && mc.thePlayer != null && opponent != null && EntityUtils.getDistanceNoY(mc.thePlayer, opponent) > 6.5 && combo > 0) {
+        if (isToggled() && mc.thePlayer != null && opponent != null && (ticksSinceLastHit > 100 || EntityUtils.getDistanceNoY(mc.thePlayer, opponent) > 6) && combo > 0) {
             combo = 0
             ChatUtils.info("combo reset")
         }
