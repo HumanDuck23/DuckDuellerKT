@@ -56,7 +56,7 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
                                 // Send the webhook embed
                                 val fields = WebHook.buildFields(arrayListOf(mapOf("name" to "Winner", "value" to winner, "inline" to "true"), mapOf("name" to "Loser", "value" to loser, "inline" to "true")))
                                 val footer = WebHook.buildFooter(ChatUtils.removeFormatting(Session.getSession()), "https://raw.githubusercontent.com/HumanDuck23/upload-stuff-here/main/duck_dueller.png")
-                                val author = WebHook.buildAuthor("Duck Dueller", "https://raw.githubusercontent.com/HumanDuck23/upload-stuff-here/main/duck_dueller.png")
+                                val author = WebHook.buildAuthor("Duck Dueller - ${DuckDueller.getBot()?.getName()}", "https://raw.githubusercontent.com/HumanDuck23/upload-stuff-here/main/duck_dueller.png")
                                 val thumbnail = WebHook.buildThumbnail("https://raw.githubusercontent.com/HumanDuck23/upload-stuff-here/main/duck_dueller.png")
 
                                 WebHook.sendEmbed(
