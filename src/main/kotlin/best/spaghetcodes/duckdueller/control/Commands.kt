@@ -2,6 +2,7 @@ package best.spaghetcodes.duckdueller.control
 
 import best.spaghetcodes.duckdueller.DuckDueller
 import best.spaghetcodes.duckdueller.bot.BotBase
+import best.spaghetcodes.duckdueller.bot.bots.Boxing
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
 import best.spaghetcodes.duckdueller.bot.bots.TestingBot
 import best.spaghetcodes.duckdueller.utils.ChatUtils
@@ -19,7 +20,7 @@ object Commands {
      */
     class DuckCommand : CommandBase() {
 
-        private val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot())
+        private val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot(), "boxing" to Boxing())
 
         override fun getCommandName(): String {
             return "duck"
