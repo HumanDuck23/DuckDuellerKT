@@ -28,6 +28,7 @@ object Queue {
 
     fun leaveGame() {
         if (!DuckDueller.getBot()?.gameStarted!!) {
+            Movement.clearAll() // this prevents moving in the lobby (looks a little sus)
             DuckDueller.mc.thePlayer.sendChatMessage("/l")
         }
     }
