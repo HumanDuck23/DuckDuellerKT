@@ -25,4 +25,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Duck Dueller"
+rootProject.name = "KotlinForgeTemplate"
