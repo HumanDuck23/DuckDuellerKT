@@ -10,33 +10,33 @@ import net.minecraft.util.Vec3
 object WorldUtils {
 
     fun airInFront(player: EntityPlayer, distance: Float): Boolean {
-        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player))
+        return airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player))
     }
 
     fun airInBack(player: EntityPlayer, distance: Float): Boolean {
-        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(180f))
+        return airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(180f))
     }
 
     fun airOnLeft(player: EntityPlayer, distance: Float): Boolean {
-        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f))
+        return airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f))
         //return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(90f), 2, 2)
     }
 
     fun airOnRight(player: EntityPlayer, distance: Float): Boolean {
-        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f))
+        return airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f))
         //return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 2, 2)
     }
 
     fun airCheckAngle(player: EntityPlayer, distance: Float, angleMin: Float, angleMax: Float): Boolean {
         if (angleMax < angleMin) {
             for (i in angleMin.toInt() downTo angleMax.toInt()) {
-                if (airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
+                if (airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
                     return true
                 }
             }
         } else {
             for (i in angleMin.toInt()..angleMax.toInt()) {
-                if (airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
+                if (airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
                     return true
                 }
             }
@@ -44,9 +44,9 @@ object WorldUtils {
         return false
     }
 
-    private fun airCheck(pos: BlockPos, distance: Float, lookVec: Vec3): Boolean {
+    private fun airCheck(player: EntityPlayer, pos: BlockPos, distance: Float, lookVec: Vec3): Boolean {
         for (i in 1..distance.toInt()) {
-            if (DuckDueller.mc.theWorld.getBlockState(BlockPos(pos.x + lookVec.xCoord * i, pos.y - 0.2, pos.z + lookVec.zCoord * i)).block == Blocks.air) {
+            if (DuckDueller.mc.theWorld.getBlockState(BlockPos(pos.x + lookVec.xCoord * i, pos.y - (if (player.onGround) 0.2 else 1.4), pos.z + lookVec.zCoord * i)).block == Blocks.air) {
                 return true
             }
         }
