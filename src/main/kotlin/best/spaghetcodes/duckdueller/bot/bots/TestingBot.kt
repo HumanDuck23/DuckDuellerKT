@@ -20,14 +20,6 @@ class TestingBot : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 Movement.stopForward()
             }
 
-            if (WorldUtils.airCheckAngle(mc.thePlayer, 4f, 45f)) {
-                Movement.stopLeft()
-            }
-
-            if (WorldUtils.airCheckAngle(mc.thePlayer, 4f, -45f)) {
-                Movement.stopRight()
-            }
-
             if (WorldUtils.airOnLeft(mc.thePlayer, 4f)) {
                 Movement.stopLeft()
             }
