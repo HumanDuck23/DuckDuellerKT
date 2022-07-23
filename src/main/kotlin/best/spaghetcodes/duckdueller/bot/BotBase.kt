@@ -92,6 +92,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     /** Called right before the game starts (1s) **/
     protected open fun beforeStart() {}
 
+    /** Called before the bot leaves the game (dodge **/
+    protected open fun beforeLeave() {}
+
     /**
      * Called when the opponent's stats have been fetched
      */
@@ -143,6 +146,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         playersSent.add(0, p.name)
 
         if (dodge) {
+            beforeLeave()
+            resetVars()
             Queue.leaveGame()
             TimeUtils.setTimeout(fun () { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
         }
@@ -212,13 +217,17 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         return opponent != null
     }
 
-    private fun _gameEnd() {
+    private fun resetVars() {
         opponent = null
         calledFoundOpponent = false
         opponentTimer?.cancel()
         gameStarted = false
         gotStats = false
         calledJoin = false
+    }
+
+    private fun _gameEnd() {
+        resetVars()
 
         onGameEnd()
 
@@ -238,6 +247,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
             if (unformatted.contains("The game starts in 2 seconds!") && !gotStats && Config.get("dodgeNoStats") as Boolean) {
                 ChatUtils.info("Didn't find any stats, leaving game...")
+                beforeLeave()
+                resetVars()
                 Queue.leaveGame()
                 TimeUtils.setTimeout(fun() { Queue.joinGame(queueCommand) }, RandomUtils.randomIntInRange(4000, 8000))
             }
