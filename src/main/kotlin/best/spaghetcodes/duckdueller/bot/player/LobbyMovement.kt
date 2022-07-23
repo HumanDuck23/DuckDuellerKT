@@ -14,7 +14,11 @@ object LobbyMovement {
     private var intervals: ArrayList<Timer?> = ArrayList()
 
     fun sumo() {
-        sumo1()
+        val opt = RandomUtils.randomIntInRange(0, 1)
+        when (opt) {
+            0 -> sumo1()
+            1 -> twerk()
+        }
     }
 
     fun stop() {
@@ -44,6 +48,17 @@ object LobbyMovement {
                            }, 0, RandomUtils.randomIntInRange(50, 100)))
             }, RandomUtils.randomIntInRange(100, 250))
         }
+    }
+
+    private fun twerk() {
+        intervals.add(TimeUtils.setInterval(
+            fun () {
+                if (Movement.sneaking()) {
+                    Movement.stopSneaking()
+                } else {
+                    Movement.startSneaking()
+                }
+        }, RandomUtils.randomIntInRange(500, 900), RandomUtils.randomIntInRange(200, 500)))
     }
 
     @SubscribeEvent
