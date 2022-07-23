@@ -27,8 +27,21 @@ object WorldUtils {
         //return circleAirCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(-90f), 2, 2)
     }
 
-    fun airCheckAngle(player: EntityPlayer, distance: Float, angle: Float): Boolean {
-        return airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(angle))
+    fun airCheckAngle(player: EntityPlayer, distance: Float, angleMin: Float, angleMax: Float): Boolean {
+        if (angleMax < angleMin) {
+            for (i in angleMin.toInt() downTo angleMax.toInt()) {
+                if (airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
+                    return true
+                }
+            }
+        } else {
+            for (i in angleMin.toInt()..angleMax.toInt()) {
+                if (airCheck(player.position, distance, EntityUtils.get2dLookVec(player).rotateYaw(i.toFloat()))) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun airCheck(pos: BlockPos, distance: Float, lookVec: Vec3): Boolean {
