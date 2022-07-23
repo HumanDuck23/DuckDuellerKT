@@ -89,6 +89,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     /** Called when the bot joins the game **/
     protected open fun onJoin() {}
 
+    /** Called right before the game starts (1s) **/
+    protected open fun beforeStart() {}
+
     /**
      * Called when the opponent's stats have been fetched
      */
@@ -248,6 +251,10 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             if (unformatted.matches(Regex(".* has joined \\(./2\\)!")) && !calledJoin) {
                 calledJoin = true
                 onJoin()
+            }
+
+            if (unformatted.contains("The game starts in 1 second!")) {
+                beforeStart()
             }
         }
     }
