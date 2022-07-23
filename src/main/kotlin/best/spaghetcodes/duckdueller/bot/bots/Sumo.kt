@@ -11,6 +11,22 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         return "Sumo"
     }
 
+    override fun onJoin() {
+        TimeUtils.setTimeout(fun () {
+            ChatUtils.info("Starting Lobby Movement")
+            LobbyMovement.sumo()
+        }, RandomUtils.randomIntInRange(1000, 2000))
+    }
+
+    override fun beforeStart() {
+        ChatUtils.info("Stopping Lobby Movement")
+        LobbyMovement.stop()
+    }
+
+    override fun beforeLeave() {
+        LobbyMovement.stop()
+    }
+
     override fun onOpponentStats(p: JSONDataClasses.Player, stats: JsonObject) {
         if (isToggled() && !gameStarted && stats.get("success").asBoolean) {
             val player = stats.get("player").asJsonObject
@@ -51,7 +67,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
 
     override fun onAttack() {
         Combat.wTap(80)
-        //Movement.clearLeftRight()
+        Movement.clearLeftRight()
     }
 
     override fun onAttacked() {
@@ -119,9 +135,9 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             // a bunch of if's to detect edges and avoid them instead of just not walking off
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 9f, 20f, 60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 7f, 70f, 110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 9f, 120f, 160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 11f, 20f, 60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 8f, 70f, 110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 11f, 120f, 160f))
                 && combo <= 2
             ) {
                 movePriority[1] += 5
@@ -129,20 +145,20 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             }
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 9f, -20f, -60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 7f, -70f, -110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 9f, -120f, -160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 11f, -20f, -60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 8f, -70f, -110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 11f, -120f, -160f))
                 && combo <= 2
             ) {
                 movePriority[0] += 5
                 clear = false
             }
 
-            if (rightEdge(4f)) {
+            if (rightEdge(6f)) {
                 movePriority[0] += 10
                 clear = false
             }
-            if (leftEdge(4f)) {
+            if (leftEdge(6f)) {
                 movePriority[1] += 10
                 clear = false
             }
