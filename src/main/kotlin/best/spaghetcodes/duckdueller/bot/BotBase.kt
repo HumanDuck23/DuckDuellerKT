@@ -49,6 +49,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     var lastOpponentName = ""
 
+    private var calledJoin = false
+
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
         return "Base"
@@ -83,6 +85,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
      * Called every tick
      */
     protected open fun onTick() {}
+
+    /** Called when the bot joins the game **/
+    protected open fun onJoin() {}
 
     /**
      * Called when the opponent's stats have been fetched
@@ -210,6 +215,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         opponentTimer?.cancel()
         gameStarted = false
         gotStats = false
+        calledJoin = false
 
         onGameEnd()
 
@@ -237,6 +243,11 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
                 _gameStart()
             } else if (unformatted.contains(stopMessage)) {
                 _gameEnd()
+            }
+
+            if (unformatted.matches(Regex(".* has joined \\(./2\\)!")) && !calledJoin) {
+                calledJoin = true
+                onJoin()
             }
         }
     }
