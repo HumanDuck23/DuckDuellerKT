@@ -2,6 +2,7 @@ package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
+import best.spaghetcodes.duckdueller.bot.player.LobbyMovement
 import best.spaghetcodes.duckdueller.bot.player.Mouse
 import best.spaghetcodes.duckdueller.bot.player.PacketReader
 import best.spaghetcodes.duckdueller.bot.player.Queue
@@ -41,6 +42,7 @@ object DuckDueller {
         MinecraftForge.EVENT_BUS.register(eventHandler)
         MinecraftForge.EVENT_BUS.register(Queue)
         MinecraftForge.EVENT_BUS.register(Mouse)
+        MinecraftForge.EVENT_BUS.register(LobbyMovement)
         MinecraftForge.EVENT_BUS.register(PacketReader())
 
         setBot(Sumo()) // default bot is sumo
