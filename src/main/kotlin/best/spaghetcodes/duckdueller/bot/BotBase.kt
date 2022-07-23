@@ -178,7 +178,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             val pos2 = opponentPositions[0]
             val opponentVec = Vec3(pos2.xCoord - pos1.xCoord, 0.0, pos2.zCoord - pos1.zCoord)
 
-            val angle = acos((leftVec.xCoord * opponentVec.xCoord + leftVec.zCoord * opponentVec.zCoord) / (leftVec.lengthVector() * opponentVec.lengthVector()))
+            val angle = acos((leftVec.xCoord * opponentVec.xCoord + leftVec.zCoord * opponentVec.zCoord) / (leftVec.lengthVector() * opponentVec.lengthVector())) * 180 / Math.PI
             return angle
         } else {
             return null
