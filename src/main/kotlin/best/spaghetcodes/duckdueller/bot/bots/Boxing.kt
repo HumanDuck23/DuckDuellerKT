@@ -84,7 +84,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
             val vec2 = EntityUtils.get2dLookVec(opponent!!)
 
             val angle = acos((vec1.xCoord * vec2.xCoord + vec1.yCoord * vec2.yCoord) / (vec1.lengthVector() * vec2.lengthVector()))  * 180 / Math.PI
-            return angle in 90f..270f
+            return angle in 0f..90f
         }
         return false
     }
