@@ -47,6 +47,11 @@ object Queue {
             TimeUtils.setTimeout(fun () {
                 DuckDueller.mc.thePlayer.sendChatMessage("/l")
             }, 50)
+        } else if (unformatted.contains("A disconnect occurred in your connection, so you were put")) {
+            TimeUtils.setTimeout(fun () {
+                if (DuckDueller.getBot()?.queueCommand != "")
+                    joinGame(DuckDueller.getBot()?.queueCommand!!)
+            }, RandomUtils.randomIntInRange(4000, 6000))
         }
     }
 
