@@ -10,6 +10,7 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import net.minecraft.network.INetHandler
 import net.minecraft.network.Packet
+import net.minecraft.network.play.server.S19PacketEntityStatus
 import net.minecraft.network.play.server.S45PacketTitle
 import net.minecraft.network.play.server.S3EPacketTeams
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -70,6 +71,9 @@ class PacketReader : SimpleChannelInboundHandler<Packet<INetHandler>>(false) {
             }
             is S3EPacketTeams -> {
                 Queue.teamPacket(msg)
+            }
+            is S19PacketEntityStatus -> {
+                DuckDueller.getBot()?.onEntityStatus(msg)
             }
         }
         ctx.fireChannelRead(msg)
