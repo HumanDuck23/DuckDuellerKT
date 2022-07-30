@@ -11,6 +11,8 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         return "Sumo"
     }
 
+    private var tapping = false
+
     override fun onJoin() {
         TimeUtils.setTimeout(fun () {
             ChatUtils.info("Starting Lobby Movement")
@@ -66,7 +68,12 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
     }
 
     override fun onAttack() {
-        Combat.wTap(80)
+        tapping = true
+        ChatUtils.info("W-Tap")
+        Combat.wTap(100)
+        TimeUtils.setTimeout(fun () {
+            tapping = false
+        }, 80)
         Movement.clearLeftRight()
     }
 
@@ -101,7 +108,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
         if (isToggled() && gameStarted && opponent != null && mc.theWorld != null && mc.thePlayer != null) {
             val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
 
-            if (distance > 5) {
+            if (distance > 4.3) {
                 Mouse.stopLeftAC()
             } else {
                 Mouse.startLeftAC()
@@ -111,33 +118,34 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             var clear = false
             var randomStrafe = false
 
-            if (combo >= 1) {
-                clear = true
-            }
-
-            if (distance > 5) {
-                randomStrafe = true
-            } else {
-                randomStrafe = false
-                if (distance > 1.5) {
-                    if (opponentMovingRight() && combo < 1) {
-                        movePriority[0] += 1
-                    } else if (opponentMovingLeft() && combo < 1) {
-                        movePriority[1] += 1
-                    } else {
-                        clear = true
+            if (distance > 2) {
+                if (nearEdge(3f)) {
+                    if (opponentMovingRight()) {
+                        movePriority[1] += 2
+                    } else if (opponentMovingLeft()) {
+                        movePriority[0] += 2
                     }
                 } else {
-                    clear = true
+                    if (opponentNearEdge(4f) && combo < 1) {
+                        if (opponentMovingRight()) {
+                            movePriority[0] += 2
+                        } else if (opponentMovingLeft() && combo < 1) {
+                            movePriority[1] += 2
+                        }
+                    } else {
+                        randomStrafe = true
+                    }
                 }
+            } else {
+                clear = true
             }
 
             // a bunch of if's to detect edges and avoid them instead of just not walking off
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 11f, 20f, 60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 8f, 70f, 110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 11f, 120f, 160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 5f, 20f, 60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 4.5f, 70f, 110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 5f, 120f, 160f))
                 && combo <= 2
             ) {
                 movePriority[1] += 5
@@ -145,25 +153,30 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             }
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 11f, -20f, -60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 8f, -70f, -110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 11f, -120f, -160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 5f, -20f, -60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 4.5f, -70f, -110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 5f, -120f, -160f))
                 && combo <= 2
             ) {
                 movePriority[0] += 5
                 clear = false
             }
 
-            if (rightEdge(6f)) {
+            // placing this here so that it only strafes in a combo if it's REALLY close to an edge
+            if (combo >= 1) {
+                clear = true
+            }
+
+            if (rightEdge(5f)) {
                 movePriority[0] += 10
                 clear = false
             }
-            if (leftEdge(6f)) {
+            if (leftEdge(5f)) {
                 movePriority[1] += 10
                 clear = false
             }
 
-            if (combo >= 3 && distance >= 3.2 && mc.thePlayer.onGround && !nearEdge(3f) && !WorldUtils.airInFront(mc.thePlayer, 3f)) {
+            if (combo >= 3 && distance >= 3.2 && mc.thePlayer.onGround && !nearEdge(5f) && !WorldUtils.airInFront(mc.thePlayer, 3f)) {
                 Movement.singleJump(RandomUtils.randomIntInRange(100, 150))
             }
 
@@ -172,7 +185,7 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 Movement.clearLeftRight()
             } else {
                 if (randomStrafe) {
-                    Combat.startRandomStrafe(600, 1100)
+                    Combat.startRandomStrafe(600, 900)
                 } else {
                     Combat.stopRandomStrafe()
                     if (movePriority[0] > movePriority[1]) {
@@ -191,10 +204,12 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
                 }
             }
 
-            if (distance < 1 || (distance < 2 && opponentNearEdge(3f))) {
+            if (distance < 1.2 || (distance < 2 && opponentNearEdge(3f))) {
                 Movement.stopForward()
             } else {
-                Movement.startForward()
+                if (!tapping) {
+                    Movement.startForward()
+                }
             }
 
             // don't walk off an edge
