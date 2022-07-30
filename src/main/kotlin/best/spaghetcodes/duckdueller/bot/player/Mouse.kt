@@ -106,7 +106,7 @@ object Mouse {
             val rotations = EntityUtils.getRotations(DuckDueller.mc.thePlayer, DuckDueller.getBot()?.getOpponentE(), false)
 
             if (rotations != null) { // very stupid mouse jitter code dont bully me
-                if (changedYaw == -1 && !changingYawPositive) {
+                /*if (changedYaw == -1 && !changingYawPositive) {
                     changedYawMax = RandomUtils.randomIntInRange(-2, 2)
                     changeYawBy = if (changedYawMax > 0) 1 else -1
                     changedYaw = 0
@@ -133,10 +133,10 @@ object Mouse {
                     }
                 } else {
                     changedPitch -= changePitchBy
-                }
+                }*/
 
-                DuckDueller.mc.thePlayer.rotationYaw = rotations[0] + changedYaw
-                DuckDueller.mc.thePlayer.rotationPitch = rotations[1] + changedPitch // pitch is perfect screw you
+                DuckDueller.mc.thePlayer.rotationYaw = rotations[0]// + changedYaw
+                DuckDueller.mc.thePlayer.rotationPitch = rotations[1]// + changedPitch // pitch is perfect screw you
             }
         }
     }
