@@ -7,6 +7,7 @@ import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.JsonObject
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.network.play.server.S19PacketEntityStatus
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.Vec3
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -50,6 +51,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     var lastOpponentName = ""
 
     private var calledJoin = false
+
+    private var attackedID = -1
 
     // These need to be overridden by subclasses to customize the bots behavior
     open fun getName(): String {
@@ -112,10 +115,30 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     // other
 
+    fun onEntityStatus(packet: S19PacketEntityStatus) {
+        if (packet.opCode.toInt() == 2) { // damage sound
+            val entity = packet.getEntity(mc.theWorld)
+            if (entity != null) {
+                if (entity.entityId == attackedID) {
+                    attackedID = -1
+                    opponentCombo = 0
+                    combo++
+                    onAttack()
+                    ticksSinceLastHit = 0
+                } else if (mc.thePlayer != null && entity.entityId == mc.thePlayer.entityId) {
+                    ticksSinceLastDamage = 0
+                    combo = 0
+                    opponentCombo++
+                    onAttacked()
+                }
+            }
+        }
+    }
+
     protected fun onParsedStats(p: JSONDataClasses.Player, w: Int, wlr: Float, cws: Int) {
         var dodge = false
 
-        if (playersLost.contains(p.name)) {
+        if (playersLost.contains(p.name) && Config.get("dodgeLost") as Boolean) {
             ChatUtils.info("Lost to ${p.name} before, dodging...")
             dodge = true
         }
@@ -286,12 +309,9 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
             }
         }
 
-        if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
-            ticksSinceLastDamage = 0
-            combo = 0
-            opponentCombo++
-            onAttacked()
-        }
+        /*if (isToggled() && mc.thePlayer != null && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
+
+        }*/
 
         if (isToggled() && mc.thePlayer != null && opponent != null && (ticksSinceLastHit > 100 || EntityUtils.getDistanceNoY(mc.thePlayer, opponent) > 6) && combo > 0) {
             combo = 0
@@ -308,11 +328,8 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
     @SubscribeEvent
     fun onAttackEntityEvent(ev: AttackEntityEvent) {
-        if (isToggled() && ev.entity === mc.thePlayer && ticksSinceLastHit > 15) {
-            opponentCombo = 0
-            combo++
-            onAttack()
-            ticksSinceLastHit = 0
+        if (isToggled() && ev.entity === mc.thePlayer) {
+            attackedID = ev.target.entityId
         }
     }
 
