@@ -28,8 +28,10 @@ object Queue {
 
     fun leaveGame() {
         if (!DuckDueller.getBot()?.gameStarted!!) {
-            Movement.clearAll() // this prevents moving in the lobby (looks a little sus)
             DuckDueller.mc.thePlayer.sendChatMessage("/l")
+            TimeUtils.setTimeout(fun () {
+                LobbyMovement.stop() // this prevents moving in the lobby (looks a little sus)
+            }, 2000) // wait just in case lel
         }
     }
 
