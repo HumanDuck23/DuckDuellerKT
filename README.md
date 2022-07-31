@@ -23,7 +23,18 @@ in a while to see how it's going.
 		<li>✅ Realistic Aim</li>
 		<li>✅ Realistic Strafing</li>
 		<li>✅ Stat-based Queue Dodging</li>
-		<li>🚧 Multiple Gamemode Support</li>
+		<li>
+            🚧 Multiple Gamemode Support
+            <ul>
+                <li>✅ Sumo</li>
+                <li>🚧 Boxing</li>
+                <li>🚧 Classic</li>
+                <li>🚧 OP</li>
+                <li>🛒 Blitz (maybe)</li>
+                <li>🛒 NoDebuff (maybe)</li>
+                <li>🛒 UHC (maybe)</li>
+            </ul>
+        </li>
 		<li>✅ Multiple Failsafes</li>
 		<li>✅ Discord Webhook Integration</li>
 		<li>✅ Lots of Customization</li>
