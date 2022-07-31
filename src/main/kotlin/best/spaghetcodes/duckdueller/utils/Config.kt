@@ -24,7 +24,7 @@ object Config {
         config["apiKey"] = ""
         config["dodgeWins"] = 4000
         config["dodgeWS"] = 20
-        config["dodgeWLR"] = 4
+        config["dodgeWLR"] = 4f
         config["dodgeLost"] = true
         config["dodgeNoStats"] = true
     }
@@ -49,6 +49,9 @@ object Config {
                             }
                             is Boolean -> {
                                 config[split[0]] = split[1].toBoolean()
+                            }
+                            is Float -> {
+                                config[split[0]] = split[1].toFloat()
                             }
                         }
                     }
