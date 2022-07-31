@@ -28,6 +28,7 @@ object Config {
         config["dodgeWLR"] = 4f
         config["dodgeLost"] = true
         config["dodgeNoStats"] = true
+        config["currentBot"] = "sumo"
     }
 
     fun load() {

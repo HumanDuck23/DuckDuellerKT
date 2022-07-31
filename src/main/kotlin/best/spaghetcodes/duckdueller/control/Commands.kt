@@ -20,8 +20,6 @@ object Commands {
      */
     class DuckCommand : CommandBase() {
 
-        private val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot(), "boxing" to Boxing())
-
         override fun getCommandName(): String {
             return "duck"
         }
@@ -66,10 +64,12 @@ object Commands {
                             ChatUtils.info("Current selected bot: ${EnumChatFormatting.GREEN}${DuckDueller.getBot()?.getName()}")
                         } else {
                             if (args[1].lowercase() == "list") {
-                                ChatUtils.info("Available bots: ${bots.keys.joinToString(", ")}")
+                                ChatUtils.info("Available bots: ${DuckDueller.bots.keys.joinToString(", ")}")
                             } else {
-                                if (args[1].lowercase() in bots.keys) {
-                                    DuckDueller.setBot(bots[args[1].lowercase()]!!)
+                                if (args[1].lowercase() in DuckDueller.bots.keys) {
+                                    DuckDueller.setBot(DuckDueller.bots[args[1].lowercase()]!!)
+                                    Config.set("currentBot", args[1].lowercase())
+                                    Config.save()
                                     ChatUtils.info("Bot set to ${EnumChatFormatting.GREEN}${DuckDueller.getBot()?.getName()}")
                                 } else {
                                     ChatUtils.error("Bot not found.")

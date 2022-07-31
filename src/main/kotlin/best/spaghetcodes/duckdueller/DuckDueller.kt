@@ -1,7 +1,9 @@
 package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.bot.BotBase
+import best.spaghetcodes.duckdueller.bot.bots.Boxing
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
+import best.spaghetcodes.duckdueller.bot.bots.TestingBot
 import best.spaghetcodes.duckdueller.bot.player.LobbyMovement
 import best.spaghetcodes.duckdueller.bot.player.Mouse
 import best.spaghetcodes.duckdueller.bot.player.PacketReader
@@ -30,6 +32,7 @@ object DuckDueller {
     private val eventHandler: EventHandler = EventHandler()
 
     private var bot: BotBase? = null
+    val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot(), "boxing" to Boxing())
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
@@ -45,7 +48,11 @@ object DuckDueller {
         MinecraftForge.EVENT_BUS.register(LobbyMovement)
         MinecraftForge.EVENT_BUS.register(PacketReader())
 
-        setBot(Sumo()) // default bot is sumo
+        if (bots.keys.contains(Config.get("currentBot"))) {
+            bots[Config.get("currentBot")]?.let { setBot(it) }
+        } else {
+            setBot(Sumo()) // default bot is sumo
+        }
     }
 
     fun getBot(): BotBase? {
