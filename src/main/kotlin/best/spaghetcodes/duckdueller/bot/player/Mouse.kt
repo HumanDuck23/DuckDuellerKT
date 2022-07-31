@@ -16,16 +16,6 @@ object Mouse {
     private var rClickDown = false
 
     private var tracking = false
-    private var changingYawPositive = false
-    private var changedYaw = -1
-    private var changedYawMax = -1
-    private var changeYawBy = 1
-
-    // incompetent dev slaying
-    private var changingPitchPositive = false
-    private var changedPitch = -1
-    private var changedPitchMax = -1
-    private var changePitchBy = 1
 
     fun leftClick() {
         if (DuckDueller.getBot()?.isToggled() == true) {
@@ -105,38 +95,20 @@ object Mouse {
         if (DuckDueller.mc.thePlayer != null && DuckDueller.getBot()?.isToggled() == true && tracking && DuckDueller.getBot()?.getOpponentE() != null) {
             val rotations = EntityUtils.getRotations(DuckDueller.mc.thePlayer, DuckDueller.getBot()?.getOpponentE(), false)
 
-            if (rotations != null) { // very stupid mouse jitter code dont bully me
-                /*if (changedYaw == -1 && !changingYawPositive) {
-                    changedYawMax = RandomUtils.randomIntInRange(-2, 2)
-                    changeYawBy = if (changedYawMax > 0) 1 else -1
-                    changedYaw = 0
-                    changingYawPositive = true
-                } else if (changingYawPositive) {
-                    changedYaw += changeYawBy
-                    if (abs(changedYaw) >= abs(changedYawMax)) {
-                        changingYawPositive = false
+            if (rotations != null) {
+                val lookRand = (Config.get("lookRand") as Float).toDouble()
+                var da = ((rotations[0] - DuckDueller.mc.thePlayer.rotationYaw) + RandomUtils.randomDoubleInRange(-lookRand, lookRand)).toFloat()
+                val maxRot = Config.get("lookSpeed") as Float
+                if (abs(da) > maxRot) {
+                    da = if (da > 0) {
+                        maxRot
+                    } else {
+                        -maxRot
                     }
-                } else {
-                    changedYaw -= changeYawBy
                 }
 
-                // jos is contributing :OOOOOOO (no he isnt)
-                if (changedPitch == -1 && !changingPitchPositive) {
-                    changedPitchMax = RandomUtils.randomIntInRange(-1, 1)
-                    changePitchBy = if (changedPitchMax > 0) 1 else -1
-                    changedPitch = 0
-                    changingPitchPositive = true
-                } else if (changingPitchPositive) {
-                    changedPitch += changePitchBy
-                    if (abs(changedYaw) >= abs(changedPitchMax)) {
-                        changingPitchPositive = false
-                    }
-                } else {
-                    changedPitch -= changePitchBy
-                }*/
-
-                DuckDueller.mc.thePlayer.rotationYaw = rotations[0]// + changedYaw
-                DuckDueller.mc.thePlayer.rotationPitch = rotations[1]// + changedPitch // pitch is perfect screw you
+                DuckDueller.mc.thePlayer.rotationYaw += da
+                DuckDueller.mc.thePlayer.rotationPitch = rotations[1] // pitch is perfect screw you
             }
         }
     }
