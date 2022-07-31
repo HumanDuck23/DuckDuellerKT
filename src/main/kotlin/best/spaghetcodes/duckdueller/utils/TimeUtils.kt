@@ -7,18 +7,21 @@ object TimeUtils {
     /**
      * Call a function after delay ms
      */
-    fun setTimeout(function: () -> Unit, delay: Int) {
+    fun setTimeout(function: () -> Unit, delay: Int): Timer? {
         try {
-            Timer().schedule(
+            val timer = Timer()
+            timer.schedule(
                 object : TimerTask() {
                     override fun run() {
                         function()
                     }
                 }, delay.toLong()
             )
+            return timer
         } catch (e: Exception) {
             println("Error scheduling timer with ${delay}ms: " + e.message)
         }
+        return null
     }
 
     /**
