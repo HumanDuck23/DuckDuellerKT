@@ -106,6 +106,14 @@ object Commands {
                                         Config.set(args[0], args[1].toBoolean())
                                         ChatUtils.info("${EnumChatFormatting.GREEN}Successfully set ${args[0]} to ${EnumChatFormatting.BOLD}${Config.get(args[0])}")
                                     }
+                                    is Float -> {
+                                        try {
+                                            Config.set(args[0], args[1].toFloat())
+                                            ChatUtils.info("${EnumChatFormatting.GREEN}Successfully set ${args[0]} to ${EnumChatFormatting.BOLD}${args[1]}")
+                                        } catch (e: Exception) {
+                                            ChatUtils.error("Invalid float: ${args[1]}")
+                                        }
+                                    }
                                 }
                                 Config.save()
                             } else {

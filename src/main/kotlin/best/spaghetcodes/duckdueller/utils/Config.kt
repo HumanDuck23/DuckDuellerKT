@@ -14,6 +14,7 @@ object Config {
     init {
         config["minCPS"] = 10
         config["maxCPS"] = 14
+        config["lookSpeed"] = 10f
         config["webhook"] = ""
         config["ggDelay"] = 100
         config["ggMessage"] = "gg"
