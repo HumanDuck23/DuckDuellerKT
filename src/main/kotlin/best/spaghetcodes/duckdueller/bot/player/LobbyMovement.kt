@@ -40,8 +40,8 @@ object LobbyMovement {
                 }, RandomUtils.randomIntInRange(400, 800))
                 intervals.add(TimeUtils.setInterval(
                     fun () {
-                        tickYawChange = if (WorldUtils.airInFront(DuckDueller.mc.thePlayer, 5f)) {
-                            RandomUtils.randomDoubleInRange(if (left) 7.5 else -7.5, if (left) 10.0 else -10.0).toFloat()
+                        tickYawChange = if (WorldUtils.airInFront(DuckDueller.mc.thePlayer, 7f)) {
+                            RandomUtils.randomDoubleInRange(if (left) 4.5 else -4.5, if (left) 7.0 else -7.0).toFloat()
                         } else {
                             0f
                         }
