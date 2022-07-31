@@ -43,6 +43,8 @@ object Commands {
                         ChatUtils.info("")
                         ChatUtils.info("/duck minCPS <cps> - ${EnumChatFormatting.ITALIC}Minimum CPS of the bot")
                         ChatUtils.info("/duck maxCPS <cps> - ${EnumChatFormatting.ITALIC}Maximum CPS of the bot")
+                        ChatUtils.info("/duck lookSpeed <speed> - ${EnumChatFormatting.ITALIC}Maximum look speed of the bot")
+                        ChatUtils.info("/duck lookRand <number> - ${EnumChatFormatting.ITALIC}Slight aim randomization range")
                         ChatUtils.info("/duck webhook <url> - ${EnumChatFormatting.ITALIC}Discord WebHook URL to log games to")
                         ChatUtils.info("/duck ggMessage <message> - ${EnumChatFormatting.ITALIC}AutoGG Message")
                         ChatUtils.info("/duck ggDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before sending ${EnumChatFormatting.BOLD}ggMessage")
