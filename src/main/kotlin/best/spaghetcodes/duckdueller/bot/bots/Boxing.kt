@@ -4,12 +4,29 @@ import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.player.*
 import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.JsonObject
+import java.util.Timer
 import kotlin.math.acos
 
 class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
 
     override fun getName(): String {
         return "Boxing"
+    }
+
+    private var runner = false
+    private var fishTimer: Timer? = null
+
+    fun fishFunc(fish: Boolean = true) {
+        if (gameStarted) {
+            if (fish) {
+                Inventory.setInvItem("fish")
+            } else {
+                Inventory.setInvItem("sword")
+            }
+            fishTimer = TimeUtils.setTimeout(fun () {
+                fishFunc(!fish)
+            }, RandomUtils.randomIntInRange(10000, 20000))
+        }
     }
 
     override fun onOpponentStats(p: JSONDataClasses.Player, stats: JsonObject) {
@@ -40,6 +57,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
     override fun onGameStart() {
         Movement.startSprinting()
         Movement.startForward()
+        TimeUtils.setTimeout(this::fishFunc, RandomUtils.randomIntInRange(10000, 20000))
     }
 
     override fun onGameEnd() {
@@ -47,28 +65,16 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
         Mouse.stopLeftAC()
         Movement.clearAll()
         Combat.stopRandomStrafe()
+        fishTimer?.cancel()
     }
 
     override fun onAttack() {
-        if (combo > 2) {
-            val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
-            if (distance > 2.8) {
-                Combat.wTap(80)
-            } else {
-                if (distance in 1.5f..2.8f) {
-                    Combat.wTap(120)
-                } else {
-                    Combat.wTap(150)
-                }
-            }
-        } else {
-            Combat.wTap(80)
-        }
+        Combat.wTap(150)
         Movement.clearLeftRight()
     }
 
     override fun onAttacked() {
-        if (opponentCombo > 2) {
+        if (opponentCombo > 4) {
             Movement.stopForward()
             Movement.startBackward()
             TimeUtils.setTimeout(fun () {
@@ -84,7 +90,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
             val vec2 = EntityUtils.get2dLookVec(opponent!!)
 
             val angle = acos((vec1.xCoord * vec2.xCoord + vec1.yCoord * vec2.yCoord) / (vec1.lengthVector() * vec2.lengthVector()))  * 180 / Math.PI
-            return angle in 0f..90f
+            return angle in 30f..60f
         }
         return false
     }
@@ -104,7 +110,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                 Mouse.stopLeftAC()
             }
 
-            if (distance < 1) {
+            if (distance < 1 || (distance < 2.7 && combo >= 2)) {
                 Movement.stopForward()
             } else {
                 if (!Movement.backward()) {
@@ -112,8 +118,12 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                 }
             }
 
-            if (opponentLookingAway()) {
+            if (opponentLookingAway() && distance > 3.5) {
                 // bruh they running, that's cringe
+                if (!runner) {
+                    ChatUtils.info("Running away cringe")
+                    runner = true
+                }
                 if (opponentMovingLeft()) {
                     Movement.startLeft()
                     Movement.stopRight()
@@ -122,11 +132,12 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                     Movement.stopLeft()
                 }
             } else {
+                runner = false
                 if (distance in 15f..8f) {
                     Combat.startRandomStrafe(400, 800)
                 } else {
                     Combat.stopRandomStrafe()
-                    if (combo < 2) {
+                    if (combo < 2 && distance < 8) {
                         val rotations = EntityUtils.getRotations(opponent, mc.thePlayer, true)
                         if (rotations != null) {
                             if (rotations[0] < 0) {
