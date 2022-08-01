@@ -26,7 +26,7 @@ in a while to see how it's going.
 		<li>
             🚧 Multiple Gamemode Support
             <ul>
-                <li>✅ Sumo</li>
+                <li>✅ Sumo (needs improvement for low ping)</li>
                 <li>🚧 Boxing</li>
                 <li>🚧 Classic</li>
                 <li>🚧 OP</li>
