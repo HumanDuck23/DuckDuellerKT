@@ -60,6 +60,7 @@ object Queue {
     @SubscribeEvent
     fun onJoinWorld(ev: EntityJoinWorldEvent) {
         if (DuckDueller.mc.thePlayer != null && ev.entity == DuckDueller.mc.thePlayer) {
+            LobbyMovement.stop()
             inGame = false
         }
     }
