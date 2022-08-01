@@ -17,6 +17,8 @@ object Mouse {
 
     private var tracking = false
 
+    private var _usingProjectile = false
+
     fun leftClick() {
         if (DuckDueller.getBot()?.isToggled() == true) {
             KeyBinding.onTick(DuckDueller.mc.gameSettings.keyBindAttack.keyCode)
@@ -52,6 +54,14 @@ object Mouse {
 
     fun stopTracking() {
         tracking = false
+    }
+
+    fun setUsingProjectile(proj: Boolean) {
+        _usingProjectile = proj
+    }
+
+    fun isUsingProjectile(): Boolean {
+        return _usingProjectile
     }
 
     private fun leftACFunc() {
