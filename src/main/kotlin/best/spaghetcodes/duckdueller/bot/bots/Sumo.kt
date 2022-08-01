@@ -143,9 +143,9 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             // a bunch of if's to detect edges and avoid them instead of just not walking off
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 7f, 20f, 60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 6.5f, 70f, 110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 7f, 120f, 160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 9f, 20f, 60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 8.5f, 70f, 110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 9f, 120f, 160f))
                 && combo <= 3
             ) {
                 movePriority[1] += 5
@@ -153,9 +153,9 @@ class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
             }
 
             if (
-                (WorldUtils.airCheckAngle(mc.thePlayer, 7f, -20f, -60f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 6.5f, -70f, -110f)
-                || WorldUtils.airCheckAngle(mc.thePlayer, 7f, -120f, -160f))
+                (WorldUtils.airCheckAngle(mc.thePlayer, 9f, -20f, -60f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 8.5f, -70f, -110f)
+                || WorldUtils.airCheckAngle(mc.thePlayer, 9f, -120f, -160f))
                 && combo <= 3
             ) {
                 movePriority[0] += 5
