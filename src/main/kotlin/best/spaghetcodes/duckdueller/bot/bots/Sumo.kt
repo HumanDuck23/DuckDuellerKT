@@ -5,7 +5,7 @@ import best.spaghetcodes.duckdueller.bot.player.*
 import best.spaghetcodes.duckdueller.utils.*
 import com.google.gson.JsonObject
 
-class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel") {
+class Sumo : BotBase("Opponent: ", "Accuracy", "/play duels_sumo_duel", 2000) {
 
     override fun getName(): String {
         return "Sumo"
