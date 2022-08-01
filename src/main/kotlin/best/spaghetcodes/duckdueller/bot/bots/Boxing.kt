@@ -54,6 +54,10 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
         }
     }
 
+    override fun beforeStart() {
+        LobbyMovement.stop()
+    }
+
     override fun onGameStart() {
         Movement.startSprinting()
         Movement.startForward()
