@@ -29,6 +29,7 @@ object Config {
         config["dodgeWLR"] = 4f
         config["dodgeLost"] = true
         config["dodgeNoStats"] = true
+        config["showHud"] = true
         config["currentBot"] = "sumo"
     }
 
