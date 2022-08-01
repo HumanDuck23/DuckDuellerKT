@@ -8,6 +8,7 @@ import net.minecraft.network.play.server.S3EPacketTeams
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent
 import java.io.BufferedReader
 import java.io.File
@@ -20,6 +21,8 @@ object Queue {
 
     var inGame = false
     val playerCache = HashMap<String, String>()
+    var ticksSinceStarted = 0
+    var gameFull = false
 
     fun joinGame(msg: String) {
         if (!DuckDueller.getBot()?.gameStarted!!)
@@ -40,6 +43,9 @@ object Queue {
         val unformatted = ev.message.unformattedText
         if (unformatted.matches(Regex(".* has joined \\(./2\\)!"))) {
             inGame = true
+            if (unformatted.matches(Regex(".* has joined \\(2/2\\)!"))) {
+                gameFull = true
+            }
         } else if (unformatted.lowercase().contains("something went wrong trying") || unformatted.lowercase().contains("please don't spam the command")) {
             TimeUtils.setTimeout(fun () {
                 if (DuckDueller.getBot()?.queueCommand != "")
@@ -62,12 +68,31 @@ object Queue {
         if (DuckDueller.mc.thePlayer != null && ev.entity == DuckDueller.mc.thePlayer) {
             LobbyMovement.stop()
             inGame = false
+            gameFull = false
         }
     }
 
     @SubscribeEvent
     fun onDisconnect(ev: ClientDisconnectionFromServerEvent) {
         inGame = false
+        gameFull = false
+    }
+
+    @SubscribeEvent
+    fun onTick(ev: ClientTickEvent) {
+        if (DuckDueller.getBot()?.isToggled() == true && DuckDueller.getBot()?.gameStarted == false && !gameFull) {
+            // re-queue if no game starts after 60 seconds, doubles as failsafe for when the bot is stuck in a lobby
+            ticksSinceStarted++
+
+            val _1min = 20 * 60
+            if (ticksSinceStarted > _1min) {
+                ChatUtils.info("No game started in 60s, joining new game.")
+                ticksSinceStarted = 0
+                joinGame(DuckDueller.getBot()?.queueCommand!!)
+            }
+        } else {
+            ticksSinceStarted = 0
+        }
     }
 
     private fun logTeamPacket(packet: S3EPacketTeams) {
