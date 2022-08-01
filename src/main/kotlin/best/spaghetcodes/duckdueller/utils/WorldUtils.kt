@@ -9,6 +9,11 @@ import net.minecraft.util.Vec3
 
 object WorldUtils {
 
+    fun blockInFront(player: EntityPlayer, distance: Float, yMod: Float = 0f): Block { // yMod = 0 -> feet, 1 -> 1 above feet etc
+        val vec = Vec3(player.lookVec.xCoord * distance, 0.0, player.lookVec.zCoord * distance)
+        return DuckDueller.mc.theWorld.getBlockState(player.position.add(vec.xCoord, -0.2 + yMod, vec.zCoord)).block
+    }
+
     fun airInFront(player: EntityPlayer, distance: Float): Boolean {
         return airCheck(player, player.position, distance, EntityUtils.get2dLookVec(player))
     }
