@@ -142,7 +142,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                 } else {
                     Combat.stopRandomStrafe()
                     if (combo < 2 && distance < 8) {
-                        val rotations = EntityUtils.getRotations(opponent, mc.thePlayer, true)
+                        /*val rotations = EntityUtils.getRotations(opponent, mc.thePlayer, true)
                         if (rotations != null) {
                             if (rotations[0] < 0) {
                                 Movement.stopLeft()
@@ -151,6 +151,13 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                                 Movement.stopRight()
                                 Movement.startLeft()
                             }
+                        }*/
+                        if (opponentMovingLeft()) {
+                            Movement.startLeft()
+                            Movement.stopRight()
+                        } else {
+                            Movement.startRight()
+                            Movement.stopLeft()
                         }
                     } else {
                         Movement.clearLeftRight()
