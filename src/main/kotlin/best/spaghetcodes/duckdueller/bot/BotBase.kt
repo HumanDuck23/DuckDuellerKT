@@ -153,7 +153,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
 
         val dodgeWins = Config.get("dodgeWins") as Int
         val dodgeWS = Config.get("dodgeWS") as Int
-        val dodgeWLR = Config.get("dodgeWLR") as Int
+        val dodgeWLR = Config.get("dodgeWLR") as Float
 
         if (w >= dodgeWins) {
             ChatUtils.info("${p.name} has more than $dodgeWins wins, dodging...")
