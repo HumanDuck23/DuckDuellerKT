@@ -47,6 +47,7 @@ object Commands {
                         ChatUtils.info("/duck ggMessage <message> - ${EnumChatFormatting.ITALIC}AutoGG Message")
                         ChatUtils.info("/duck ggDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before sending ${EnumChatFormatting.BOLD}ggMessage")
                         ChatUtils.info("/duck rqDelay <ms> - ${EnumChatFormatting.ITALIC}Delay to wait before re-queueing")
+                        ChatUtils.info("/duck autoRq <s> - ${EnumChatFormatting.ITALIC}Seconds to re-queue after if no game starts")
                         ChatUtils.info("/duck maxDistanceLook <blocks> - ${EnumChatFormatting.ITALIC}Bot view distance")
                         ChatUtils.info("/duck maxDistanceAttack <blocks> - ${EnumChatFormatting.ITALIC}Bot attack distance")
                         ChatUtils.info("/duck apiKey <apiKey> - ${EnumChatFormatting.ITALIC}Your Hypixel API key (or do /api new)")

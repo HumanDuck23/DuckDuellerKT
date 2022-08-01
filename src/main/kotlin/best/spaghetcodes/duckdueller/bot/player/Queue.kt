@@ -84,8 +84,8 @@ object Queue {
             // re-queue if no game starts after 60 seconds, doubles as failsafe for when the bot is stuck in a lobby
             ticksSinceStarted++
 
-            val _1min = 20 * 60
-            if (ticksSinceStarted > _1min) {
+            val time = 20 * (Config.get("autoRq") as Int)
+            if (ticksSinceStarted > time) {
                 ChatUtils.info("No game started in 60s, joining new game.")
                 ticksSinceStarted = 0
                 joinGame(DuckDueller.getBot()?.queueCommand!!)
