@@ -24,7 +24,7 @@ import kotlin.math.acos
  *
  * Simply extend this class and override some methods
  */
-open class BotBase protected constructor(val startMessage: String, val stopMessage: String, val queueCommand: String) {
+open class BotBase protected constructor(val startMessage: String, val stopMessage: String, val queueCommand: String, val stopQuickRefresh: Int = 10000) {
 
     protected val mc = Minecraft.getMinecraft();
     protected var opponent: EntityPlayer? = null
@@ -216,7 +216,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
         TimeUtils.setTimeout(fun () {
             quickRefreshTimer?.cancel()
             opponentTimer = TimeUtils.setInterval(this::bakery, 0, 5000)
-        }, 2000)
+        }, stopQuickRefresh)
 
         onGameStart()
     }
