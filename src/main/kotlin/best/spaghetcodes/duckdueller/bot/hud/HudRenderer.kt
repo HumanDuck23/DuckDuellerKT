@@ -3,7 +3,6 @@ package best.spaghetcodes.duckdueller.bot.hud
 import best.spaghetcodes.duckdueller.DuckDueller
 import best.spaghetcodes.duckdueller.bot.player.Session
 import best.spaghetcodes.duckdueller.utils.Config
-import com.sun.org.apache.xpath.internal.operations.Bool
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
