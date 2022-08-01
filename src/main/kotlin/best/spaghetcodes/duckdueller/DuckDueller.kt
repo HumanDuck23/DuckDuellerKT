@@ -4,6 +4,7 @@ import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.bots.Boxing
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
 import best.spaghetcodes.duckdueller.bot.bots.TestingBot
+import best.spaghetcodes.duckdueller.bot.hud.HudRenderer
 import best.spaghetcodes.duckdueller.bot.player.LobbyMovement
 import best.spaghetcodes.duckdueller.bot.player.Mouse
 import best.spaghetcodes.duckdueller.bot.player.PacketReader
@@ -46,6 +47,7 @@ object DuckDueller {
         MinecraftForge.EVENT_BUS.register(Queue)
         MinecraftForge.EVENT_BUS.register(Mouse)
         MinecraftForge.EVENT_BUS.register(LobbyMovement)
+        MinecraftForge.EVENT_BUS.register(HudRenderer)
         MinecraftForge.EVENT_BUS.register(PacketReader())
 
         if (bots.keys.contains(Config.get("currentBot"))) {
