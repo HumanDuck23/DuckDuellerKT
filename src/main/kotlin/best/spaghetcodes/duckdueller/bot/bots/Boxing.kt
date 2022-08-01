@@ -73,7 +73,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
     }
 
     override fun onAttack() {
-        Combat.wTap(150)
+        Combat.wTap(100)
         Movement.clearLeftRight()
     }
 
