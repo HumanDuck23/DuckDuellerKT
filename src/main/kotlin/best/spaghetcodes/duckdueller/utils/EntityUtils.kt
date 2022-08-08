@@ -1,6 +1,7 @@
 package best.spaghetcodes.duckdueller.utils
 
 import best.spaghetcodes.duckdueller.DuckDueller
+import best.spaghetcodes.duckdueller.bot.player.Mouse
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
@@ -59,55 +60,71 @@ object EntityUtils {
             if (center) {
                 pos = Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
             } else {
-                val box = target.entityBoundingBox
+                if (!Mouse.isUsingProjectile()) {
+                    val box = target.entityBoundingBox
 
-                // get the four corners of the hitbox
-                var yPos = player.posY + player.eyeHeight
+                    // get the four corners of the hitbox
+                    var yPos = player.posY + player.eyeHeight
 
-                if (!player.onGround) {
-                    yPos = target.posY + target.eyeHeight
-                } else if (abs(target.posY - player.posY) > player.eyeHeight) {
-                    yPos = target.posY + target.eyeHeight / 2f
-                }
-
-                val corner1 = Vec3(box.minX, yPos, box.minZ)
-                val corner2 = Vec3(box.maxX, yPos, box.minZ)
-                val corner3 = Vec3(box.minX, yPos, box.maxZ)
-                val corner4 = Vec3(box.maxX, yPos, box.maxZ)
-
-                // get the closest 2 corners
-                val closest = getClosestCorner(corner1, corner2, corner3, corner4)
-                var a = closest[0]
-                var b = closest[1]
-
-                val p = Vec3(player.posX, player.posY + player.eyeHeight, player.posZ)
-
-                // since the two corners are either always on the same X or same Z position, we don't need complicated math
-                if (a.zCoord == b.zCoord) {
-                    if (a.xCoord > b.xCoord) {
-                        val temp = a
-                        a = b
-                        b = temp
+                    if (!player.onGround) {
+                        yPos = target.posY + target.eyeHeight
+                    } else if (abs(target.posY - player.posY) > player.eyeHeight) {
+                        yPos = target.posY + target.eyeHeight / 2f
+                    } else if (player.posY - target.posY > 0.3) {
+                        yPos = target.posY + target.eyeHeight
                     }
-                    if (p.xCoord < a.xCoord) {
-                        pos = a
-                    } else if (p.xCoord > b.xCoord) {
-                        pos = b
+
+                    val corner1 = Vec3(box.minX, yPos, box.minZ)
+                    val corner2 = Vec3(box.maxX, yPos, box.minZ)
+                    val corner3 = Vec3(box.minX, yPos, box.maxZ)
+                    val corner4 = Vec3(box.maxX, yPos, box.maxZ)
+
+                    // get the closest 2 corners
+                    val closest = getClosestCorner(corner1, corner2, corner3, corner4)
+                    var a = closest[0]
+                    var b = closest[1]
+
+                    val p = Vec3(player.posX, player.posY + player.eyeHeight, player.posZ)
+
+                    // since the two corners are either always on the same X or same Z position, we don't need complicated math
+                    if (a.zCoord == b.zCoord) {
+                        if (a.xCoord > b.xCoord) {
+                            val temp = a
+                            a = b
+                            b = temp
+                        }
+                        if (p.xCoord < a.xCoord) {
+                            pos = a
+                        } else if (p.xCoord > b.xCoord) {
+                            pos = b
+                        } else {
+                            pos = Vec3(p.xCoord, a.yCoord, a.zCoord)
+                        }
                     } else {
-                        pos = Vec3(p.xCoord, a.yCoord, a.zCoord)
+                        if (a.zCoord > b.zCoord) {
+                            val temp = a
+                            a = b
+                            b = temp
+                        }
+                        if (p.zCoord < a.zCoord) {
+                            pos = a
+                        } else if (p.zCoord > b.zCoord) {
+                            pos = b
+                        } else {
+                            pos = Vec3(a.xCoord, a.yCoord, p.zCoord)
+                        }
                     }
                 } else {
-                    if (a.zCoord > b.zCoord) {
-                        val temp = a
-                        a = b
-                        b = temp
-                    }
-                    if (p.zCoord < a.zCoord) {
-                        pos = a
-                    } else if (p.zCoord > b.zCoord) {
-                        pos = b
+                    if ((DuckDueller.getBot()?.opponentPositions?.size ?: 0) > 0) {
+                        val pos1 = DuckDueller.getBot()?.opponentPositions?.get((DuckDueller.getBot()?.opponentPositions?.size
+                            ?: 1) - 1)
+                        val pos2 = DuckDueller.getBot()?.opponentPositions?.get(0)
+
+                        val posDiff = pos2?.subtract(pos1) ?: Vec3(0.0, 0.0, 0.0)
+                        val p = pos2?.add(Vec3(posDiff.xCoord, target.eyeHeight.toDouble(), posDiff.zCoord))
+                        pos = p ?: Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
                     } else {
-                        pos = Vec3(a.xCoord, a.yCoord, p.zCoord)
+                        pos = Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
                     }
                 }
             }
