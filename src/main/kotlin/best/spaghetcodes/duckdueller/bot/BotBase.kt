@@ -39,7 +39,7 @@ open class BotBase protected constructor(val startMessage: String, val stopMessa
     protected var ticksSinceLastHit = 0
     protected var ticksSinceLastDamage = 0
 
-    protected var opponentPositions = ArrayList<Vec3>() // tracks opponent position back 20 ticks
+    var opponentPositions = ArrayList<Vec3>() // tracks opponent position back 20 ticks
 
     protected var combo = 0
     protected var opponentCombo = 0
