@@ -121,7 +121,7 @@ object Queue {
             for (entity in entities) {
                 if (entity.length > 2) { // hypixel sends fake entities with the names just being an emoji (??? why lol)
                     // small delay for the inGame state to update
-                    TimeUtils.setTimeout(fun() { if (inGame) { checkPlayer(entity) } }, 1500)
+                    TimeUtils.setTimeout(fun() { if (inGame) { ChatUtils.info("Checking $entity"); checkPlayer(entity) } }, 1500)
                 }
             }
         }
