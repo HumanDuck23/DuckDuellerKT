@@ -82,7 +82,7 @@ object Mouse {
             TimeUtils.setTimeout(fun () {
                 cpsTimer?.cancel()
                 leftACFunc()
-            }, RandomUtils.randomIntInRange(900, 1400)) // run this method every 0.9-1.4 seconds
+            }, RandomUtils.randomIntInRange(1500, 2000)) // run this method every 1.5-2 seconds
         }
     }
 
