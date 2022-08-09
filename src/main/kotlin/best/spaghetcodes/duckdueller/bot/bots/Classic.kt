@@ -144,7 +144,6 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
             if (opponentLookingAway() && distance > 3.5) {
                 // bruh they running, that's cringe
                 if (distance > 5 && !Mouse.isUsingProjectile() && shotsFired < 5) {
-                    shotsFired++
                     clear = true
                     Mouse.stopLeftAC()
                     Mouse.setUsingProjectile(true)
@@ -154,6 +153,7 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                             val r = RandomUtils.randomIntInRange(1000, 1500)
                             Mouse.rClick(r)
                             TimeUtils.setTimeout(fun () {
+                                shotsFired++
                                 Mouse.setUsingProjectile(false)
                                 Inventory.setInvItem("sword")
                                 TimeUtils.setTimeout(fun () {
