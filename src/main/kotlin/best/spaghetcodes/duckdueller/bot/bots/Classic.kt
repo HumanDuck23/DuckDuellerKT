@@ -116,7 +116,7 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                 Mouse.startLeftAC()
             }
 
-            if ((distance in 5.0..5.5 || distance in 7.0..7.5) && !opponentLookingAway()) {
+            if ((distance in 6.0..6.5 || distance in 8.5..9.0) && !opponentLookingAway()) {
                 if (!Mouse.isUsingProjectile()) {
                     Mouse.stopLeftAC()
                     Mouse.setUsingProjectile(true)
