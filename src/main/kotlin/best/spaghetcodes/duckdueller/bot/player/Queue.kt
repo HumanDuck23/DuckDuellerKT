@@ -67,6 +67,7 @@ object Queue {
     fun onJoinWorld(ev: EntityJoinWorldEvent) {
         if (DuckDueller.mc.thePlayer != null && ev.entity == DuckDueller.mc.thePlayer) {
             LobbyMovement.stop()
+            Mouse.stopLeftAC()
             inGame = false
             gameFull = false
         }
