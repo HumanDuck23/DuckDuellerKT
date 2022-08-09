@@ -61,7 +61,10 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
 
     override fun onAttack() {
         //Combat.wTap(100)
-        Mouse.rClick(RandomUtils.randomIntInRange(80, 100))
+        val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
+        if (distance < 3) {
+            Mouse.rClick(RandomUtils.randomIntInRange(80, 100))
+        }
         Movement.clearLeftRight()
     }
 
@@ -107,7 +110,11 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                 Movement.startForward()
             }
 
-            if (distance in 5.0..5.5) {
+            if (distance < 2 && mc.thePlayer.heldItem != null && !mc.thePlayer.heldItem.displayName.lowercase().contains("sword")) {
+                Inventory.setInvItem("sword")
+            }
+
+            if ((distance in 5.0..5.5 || distance in 7.0..7.5) && !opponentLookingAway()) {
                 if (!Mouse.isUsingProjectile()) {
                     Mouse.stopLeftAC()
                     Mouse.setUsingProjectile(true)
