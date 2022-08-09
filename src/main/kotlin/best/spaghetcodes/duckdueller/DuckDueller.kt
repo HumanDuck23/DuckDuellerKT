@@ -2,6 +2,7 @@ package best.spaghetcodes.duckdueller
 
 import best.spaghetcodes.duckdueller.bot.BotBase
 import best.spaghetcodes.duckdueller.bot.bots.Boxing
+import best.spaghetcodes.duckdueller.bot.bots.Classic
 import best.spaghetcodes.duckdueller.bot.bots.Sumo
 import best.spaghetcodes.duckdueller.bot.bots.TestingBot
 import best.spaghetcodes.duckdueller.bot.hud.HudRenderer
@@ -33,7 +34,7 @@ object DuckDueller {
     private val eventHandler: EventHandler = EventHandler()
 
     private var bot: BotBase? = null
-    val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot(), "boxing" to Boxing())
+    val bots = mapOf("sumo" to Sumo(), "testing" to TestingBot(), "boxing" to Boxing(), "classic" to Classic())
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
