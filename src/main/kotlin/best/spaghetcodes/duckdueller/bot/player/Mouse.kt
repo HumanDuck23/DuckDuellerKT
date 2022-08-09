@@ -93,7 +93,7 @@ object Mouse {
         }
     }
 
-    private fun rClickUp() {
+    fun rClickUp() {
         if (DuckDueller.getBot()?.isToggled() == true) {
             rClickDown = false
             KeyBinding.setKeyBindState(DuckDueller.mc.gameSettings.keyBindUseItem.keyCode, false)
