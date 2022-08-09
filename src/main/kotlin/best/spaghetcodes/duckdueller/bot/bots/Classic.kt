@@ -174,9 +174,9 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                     } else {
                         if (combo < 2 && distance < 8) {
                             if (opponentMovingLeft()) {
-                                movePriority[0] += 1
-                            } else {
                                 movePriority[1] += 1
+                            } else {
+                                movePriority[0] += 1
                             }
                         } else {
                             clear = true
