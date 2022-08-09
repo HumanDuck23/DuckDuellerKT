@@ -112,6 +112,8 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
 
             if (distance < 2 && mc.thePlayer.heldItem != null && !mc.thePlayer.heldItem.displayName.lowercase().contains("sword")) {
                 Inventory.setInvItem("sword")
+                Mouse.rClickUp()
+                Mouse.startLeftAC()
             }
 
             if ((distance in 5.0..5.5 || distance in 7.0..7.5) && !opponentLookingAway()) {
