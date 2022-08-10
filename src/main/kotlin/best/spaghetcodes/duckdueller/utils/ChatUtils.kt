@@ -32,7 +32,9 @@ object ChatUtils {
     }
 
     fun sendChatMessage(message: String) {
-        DuckDueller.mc.thePlayer.addChatMessage(ChatComponentText(message))
+        if (DuckDueller.mc.thePlayer != null) {
+            DuckDueller.mc.thePlayer.addChatMessage(ChatComponentText(message))
+        }
     }
 
 }
