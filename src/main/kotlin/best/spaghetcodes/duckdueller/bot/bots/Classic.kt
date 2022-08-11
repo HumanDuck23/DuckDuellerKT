@@ -104,19 +104,19 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
             var clear = false
             var randomStrafe = false
 
-            if (distance < 1 || (distance < 2.7 && combo >= 2)) {
+            if (distance < 1 || (distance < 2.7 && combo >= 1)) {
                 Movement.stopForward()
             } else {
                 Movement.startForward()
             }
 
-            if (distance < 2 && mc.thePlayer.heldItem != null && !mc.thePlayer.heldItem.displayName.lowercase().contains("sword")) {
+            if (distance < 1.5 && mc.thePlayer.heldItem != null && !mc.thePlayer.heldItem.displayName.lowercase().contains("sword")) {
                 Inventory.setInvItem("sword")
                 Mouse.rClickUp()
                 Mouse.startLeftAC()
             }
 
-            if ((distance in 6.0..6.5 || distance in 8.5..9.0) && !opponentLookingAway()) {
+            if ((distance in 6.5..7.5 || distance in 8.5..9.0) && !opponentLookingAway()) {
                 if (!Mouse.isUsingProjectile()) {
                     Mouse.stopLeftAC()
                     Mouse.setUsingProjectile(true)
