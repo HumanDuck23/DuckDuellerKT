@@ -46,8 +46,6 @@ object EntityUtils {
     /**
      * Get the rotations needed to look at an entity
      *
-     * *Not originally my code, but I forgot where I found it.*
-     *
      * @param target target entity
      * @param raw If true, only returns difference in yaw and pitch instead of values needed
      * @param center If true, returns values to look at the player's face, if false, returns the values to look at the closest point in the hitbox
@@ -151,6 +149,8 @@ object EntityUtils {
                     }*/
                 }
             }
+
+            // Not originally my code, but I forgot where I found it
 
             val diffX = pos.xCoord - player.posX
             val diffY: Double = pos.yCoord - (player.posY + player.getEyeHeight().toDouble())
