@@ -2,8 +2,9 @@ package best.spaghetcodes.duckdueller.utils
 
 import best.spaghetcodes.duckdueller.DuckDueller
 import best.spaghetcodes.duckdueller.bot.player.Mouse
+import best.spaghetcodes.duckdueller.utils.Extensions.getVelocity
+import best.spaghetcodes.duckdueller.utils.Extensions.scale
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.MathHelper
 import net.minecraft.util.Vec3
@@ -115,17 +116,39 @@ object EntityUtils {
                         }
                     }
                 } else {
-                    if ((DuckDueller.getBot()?.opponentPositions?.size ?: 0) > 0) {
-                        val pos1 = DuckDueller.getBot()?.opponentPositions?.get((DuckDueller.getBot()?.opponentPositions?.size
-                            ?: 1) - 1)
+                    val dist = getDistanceNoY(player, target)
+                    val tickPredict = when (dist) {
+                        in 0f..8f -> 10.0
+                        in 8f..15f -> 15.0
+                        in 15f..25f -> 20.0
+                        else -> 25.0
+                    }
+                    val velocity = target.getVelocity().scale(tickPredict)
+                    val flatVelo = Vec3(velocity.xCoord, 0.0, velocity.zCoord)
+                    pos = target.positionVector.add(flatVelo).add(Vec3(0.0, target.eyeHeight.toDouble(), 0.0)) ?: Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
+                    if (pos.xCoord == target.posX && pos.zCoord == target.posZ) {
+                        println("X: ${target.motionX} || Z: ${target.motionZ}")
+                    }
+                    /*if ((DuckDueller.getBot()?.opponentPositions?.size ?: 0) > 1) {
+                        val pos1 = DuckDueller.getBot()?.opponentPositions?.get(1)
                         val pos2 = DuckDueller.getBot()?.opponentPositions?.get(0)
 
-                        val posDiff = pos2?.subtract(pos1) ?: Vec3(0.0, 0.0, 0.0)
-                        val p = pos2?.add(Vec3(posDiff.xCoord, target.eyeHeight.toDouble(), posDiff.zCoord))
+                        // distance moved in the last tick
+                        val _posDiff = pos2?.subtract(pos1) ?: Vec3(0.0, 0.0, 0.0)
+
+                        // assume they move the same way for the next 10 ticks (500ms)
+                        val tickPrediction = 10
+                        val posDiff = Vec3(_posDiff.xCoord * tickPrediction, 0.0, _posDiff.zCoord * tickPrediction)
+
+                        var addVec = Vec3(posDiff.xCoord, target.eyeHeight.toDouble(), posDiff.zCoord)
+                        if (getDistanceNoY(player, target) > 10) {
+                            addVec = addVec.add(addVec)
+                        }
+                        val p = pos2?.add(addVec)
                         pos = p ?: Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
                     } else {
                         pos = Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
-                    }
+                    }*/
                 }
             }
 
