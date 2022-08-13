@@ -74,7 +74,9 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
 
     override fun onAttack() {
         Combat.wTap(100)
-        Movement.clearLeftRight()
+        if (combo > 3) {
+            Movement.clearLeftRight()
+        }
     }
 
     override fun onAttacked() {
@@ -141,7 +143,7 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                     Combat.startRandomStrafe(400, 800)
                 } else {
                     Combat.stopRandomStrafe()
-                    if (combo < 2 && distance < 8) {
+                    if (combo <= 3 && distance < 8) {
                         /*val rotations = EntityUtils.getRotations(opponent, mc.thePlayer, true)
                         if (rotations != null) {
                             if (rotations[0] < 0) {
@@ -159,8 +161,6 @@ class Boxing : BotBase("Opponent: ", "Accuracy", "/play duels_boxing_duel") {
                             Movement.startRight()
                             Movement.stopLeft()
                         }
-                    } else {
-                        Movement.clearLeftRight()
                     }
                 }
             }
