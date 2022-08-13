@@ -123,7 +123,14 @@ object EntityUtils {
                     }
                     val velocity = target.getVelocity().scale(tickPredict)
                     val flatVelo = Vec3(velocity.xCoord, 0.0, velocity.zCoord)
-                    pos = target.positionVector.add(flatVelo).add(Vec3(0.0, target.eyeHeight.toDouble(), 0.0)) ?: Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
+                    val height = when (dist) {
+                        in 0f..5f -> target.eyeHeight / 2
+                        in 5f..10f -> target.eyeHeight
+                        in 10f..15f -> target.eyeHeight * 1.25
+                        in 15f..25f -> target.eyeHeight * 1.5
+                        else -> target.eyeHeight * 1.75
+                    }
+                    pos = target.positionVector.add(flatVelo).add(Vec3(0.0, height.toDouble(), 0.0)) ?: Vec3(target.posX, target.posY + target.eyeHeight, target.posZ)
                     if (pos.xCoord == target.posX && pos.zCoord == target.posZ) {
                         println("X: ${target.motionX} || Z: ${target.motionZ}")
                     }
