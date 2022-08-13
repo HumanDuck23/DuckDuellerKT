@@ -157,7 +157,7 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                 Movement.singleJump(RandomUtils.randomIntInRange(100, 150))
             }
 
-            if (opponentLookingAway() && distance > 3.5) {
+            if (opponentLookingAway() && distance in 3.5f..30f) {
                 // bruh they running, that's cringe
                 if (distance > 5 && !Mouse.isUsingProjectile() && shotsFired < 5) {
                     clear = true
