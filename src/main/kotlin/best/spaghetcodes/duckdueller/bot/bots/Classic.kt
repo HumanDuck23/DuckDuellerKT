@@ -63,7 +63,14 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
         //Combat.wTap(100)
         val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
         if (distance < 3) {
-            Mouse.rClick(RandomUtils.randomIntInRange(80, 100))
+            if (mc.thePlayer != null && mc.thePlayer.heldItem != null) {
+                val n = mc.thePlayer.heldItem.displayName.lowercase()
+                if (n.contains("rod")) {
+                    Combat.wTap(200)
+                } else if (n.contains("sword")) {
+                    Mouse.rClick(RandomUtils.randomIntInRange(80, 100))
+                }
+            }
         }
         Movement.clearLeftRight()
     }
