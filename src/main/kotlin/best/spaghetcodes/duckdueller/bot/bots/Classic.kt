@@ -80,6 +80,11 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
     }
 
     override fun onTick() {
+        if (isToggled() && mc.thePlayer != null) {
+            if (WorldUtils.blockInFront(mc.thePlayer, 2f, 0.5f) != Blocks.air && mc.thePlayer.onGround) {
+                Movement.singleJump(RandomUtils.randomIntInRange(150, 250))
+            }
+        }
         if (isToggled() && gameStarted && opponent != null && mc.theWorld != null && mc.thePlayer != null) {
             val distance = EntityUtils.getDistanceNoY(mc.thePlayer, opponent)
 
@@ -97,7 +102,9 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
             if (distance > 8.8) {
                 Movement.startJumping()
             } else {
-                Movement.stopJumping()
+                if (WorldUtils.blockInFront(mc.thePlayer, 2f, 0.5f) == Blocks.air) {
+                    Movement.stopJumping()
+                }
             }
 
             val movePriority = arrayListOf(0, 0)
@@ -116,7 +123,7 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                 Mouse.startLeftAC()
             }
 
-            if ((distance in 6.5..7.5 || distance in 8.5..9.0) && !opponentLookingAway()) {
+            if ((distance in 6.0..6.5 || distance in 8.0..8.5) && !opponentLookingAway()) {
                 if (!Mouse.isUsingProjectile()) {
                     Mouse.stopLeftAC()
                     Mouse.setUsingProjectile(true)
@@ -179,7 +186,9 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                     randomStrafe = false
                     if (opponent != null && opponent!!.heldItem != null && opponent!!.heldItem.displayName.lowercase().contains("bow")) {
                         randomStrafe = true
-                        Movement.stopJumping()
+                        if (distance < 15) {
+                            Movement.stopJumping()
+                        }
                     } else {
                         if (combo < 2 && distance < 8) {
                             if (opponentMovingLeft()) {
@@ -216,11 +225,6 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                         }
                     }
                 }
-            }
-        }
-        if (isToggled() && mc.thePlayer != null) {
-            if (WorldUtils.blockInFront(mc.thePlayer, 2f, 0.5f) != Blocks.air && mc.thePlayer.onGround) {
-                Movement.singleJump(RandomUtils.randomIntInRange(150, 250))
             }
         }
     }
