@@ -51,9 +51,11 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
 
     override fun onGameEnd() {
         shotsFired = 0
+        Mouse.stopLeftAC()
+        val i = TimeUtils.setInterval(Mouse::stopLeftAC, 100, 100)
         TimeUtils.setTimeout(fun () {
+            i?.cancel()
             Mouse.stopTracking()
-            Mouse.stopLeftAC()
             Movement.clearAll()
             Combat.stopRandomStrafe()
         }, RandomUtils.randomIntInRange(200, 400))
@@ -145,7 +147,9 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                             TimeUtils.setTimeout(fun () {
                                 Inventory.setInvItem("sword")
                                 TimeUtils.setTimeout(fun () {
-                                    Mouse.startLeftAC()
+                                    if (gameStarted) {
+                                        Mouse.startLeftAC()
+                                    }
                                 }, RandomUtils.randomIntInRange(100, 150))
                             }, RandomUtils.randomIntInRange(500, 600))
                         }, RandomUtils.randomIntInRange(50, 90))
@@ -173,7 +177,9 @@ class Classic : BotBase("Opponent: ", "Accuracy", "/play duels_classic_duel") {
                                 Mouse.setUsingProjectile(false)
                                 Inventory.setInvItem("sword")
                                 TimeUtils.setTimeout(fun () {
-                                    Mouse.startLeftAC()
+                                    if (gameStarted) {
+                                        Mouse.startLeftAC()
+                                    }
                                 }, RandomUtils.randomIntInRange(100, 200))
                             }, r + RandomUtils.randomIntInRange(100, 150))
                         }, RandomUtils.randomIntInRange(100, 200))
