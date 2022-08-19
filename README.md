@@ -1,9 +1,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"> 
+This project has been moved to a new repository: [HumanDuck23/duck-dueller-v2](https://github.com/HumanDuck23/duck-dueller-v2)
 <div style="text-align: center; font-family: 'Lato', sans-serif;">  
     <h1>Duck Dueller</h1>
-    This project has been moved to a new repository: [HumanDuck23/duck-dueller-v2](https://github.com/HumanDuck23/duck-dueller-v2)
     <img width="200" src="https://github.com/HumanDuck23/upload-stuff-here/blob/main/duck_dueller.png?raw=true" alt="Duck Dueller Image">  
 </div>  
 
